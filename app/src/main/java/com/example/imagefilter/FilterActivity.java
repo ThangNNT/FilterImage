@@ -1,20 +1,18 @@
 package com.example.imagefilter;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.imagefilter.databinding.ActivityFilterBinding;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * This Activity is only used for testing purposes. <br/>
+ * You can set MainActivity as the launch screen to see how changes in parameters affect the image.
+ */
 public class FilterActivity extends AppCompatActivity {
     private ActivityFilterBinding binding;
     public static String IMAGE_URI_EXTRA = "IMAGE_URI_EXTRA";

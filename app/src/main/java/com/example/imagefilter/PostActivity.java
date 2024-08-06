@@ -32,7 +32,6 @@ public class PostActivity extends AppCompatActivity {
                     binding.ivImage.setImageURI(uri);
                     binding.ivImage.setVisibility(View.VISIBLE);
                 }
-                // Add same code that you want to add in onActivityResult method
             });
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
@@ -41,7 +40,7 @@ public class PostActivity extends AppCompatActivity {
                 // photo picker.
                 if (uri != null) {
                     Intent intent = new Intent(this, AddImageActivity.class);
-                    intent.putExtra(AddImageActivity.IMAGE_URI, uri.toString());
+                    intent.putExtra(AddImageActivity.IMAGE_URI, uri);
                     startActivityIntent.launch(intent);
                 } else {
                     Log.d("PhotoPicker", "No media selected");

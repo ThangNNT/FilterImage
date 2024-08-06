@@ -1,41 +1,19 @@
 package com.example.imagefilter;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
-import android.util.Log;
-import android.view.DragEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.example.imagefilter.databinding.ActivityMainBinding;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
+/**
+ *  * This Activity is only used for testing purposes.
+ */
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Bitmap bitmap;

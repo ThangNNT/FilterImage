@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
 public class AddImageActivity extends AppCompatActivity {
     public static String IMAGE_URI = "IMAGE_URI";
@@ -29,6 +30,13 @@ public class AddImageActivity extends AppCompatActivity {
     private DraggableTextView currentDeleteText;
 
     private FilterItemAdapter adapter;
+
+    // Add the desired filter here
+    private final List<FilterItem> filters = Arrays.asList(
+            new FilterItem("Gray", 0f, 1f, 1f, 1f),
+            new FilterItem("Cold", 1f, 1f, 0.5f, 1f),
+            new FilterItem("Warm", 1f, 1f, 2f, 1f)
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +48,9 @@ public class AddImageActivity extends AppCompatActivity {
 
     private void setupView() {
         binding.ivImage.setDrawingCacheEnabled(true);
-        String uriString = getIntent().getStringExtra(IMAGE_URI);
-        if (uriString != null) {
+        Uri uri = getIntent().getParcelableExtra(IMAGE_URI);
+        if (uri != null) {
             try {
-                Uri uri = Uri.parse(uriString);
                 InputStream inputStream = getContentResolver().openInputStream(uri);
                 Drawable drawable = Drawable.createFromStream(inputStream, uri.toString());
                 binding.ivImage.setImageDrawable(drawable);
@@ -66,7 +73,6 @@ public class AddImageActivity extends AppCompatActivity {
                 v.setVisibility(View.GONE);
             }
         });
-
         binding.ivFilter.setOnClickListener((v)->{
             RecyclerView rv = binding.rvFilters;
             if (rv.getVisibility() == View.GONE){
@@ -76,21 +82,12 @@ public class AddImageActivity extends AppCompatActivity {
                 rv.setVisibility(View.GONE);
             }
         });
+        binding.btnBack.setOnClickListener((v)-> finish());
+        binding.btnOk.setOnClickListener((v)-> combineImageAndReturn());
 
-        binding.btnBack.setOnClickListener((v)->{
-            finish();
-        });
-
-        binding.btnOk.setOnClickListener((v)->{
-            combineImageAndReturn();
-        });
         binding.rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        this.adapter = new FilterItemAdapter(uriString,
-                Arrays.asList(
-                        new FilterItem("Gray", 0f, 1f, 1f, 1f),
-                        new FilterItem("Cold", 1f, 1f, 0.5f, 1f),
-                        new FilterItem("Warm", 1f, 1f, 2f, 1f)
-                ),
+        this.adapter = new FilterItemAdapter(uri,
+                filters,
                 (item -> {
                     ImageFilterView filterView = binding.ivImage;
                     filterView.setSaturation(item.getSaturation());
@@ -123,18 +120,24 @@ public class AddImageActivity extends AppCompatActivity {
         // so we need to convert it to mutable one
         bitmap = bitmap.copy(bitmapConfig, true);
         Canvas canvas = new Canvas(bitmap);
+
+        // draw text into image
         for (int i = 0; i < binding.layoutImage.getChildCount(); i++) {
             View child = binding.layoutImage.getChildAt(i);
             if (child instanceof DraggableTextView){
                 child.draw(canvas);
             }
         }
-
         Intent intent = new Intent(this, PostActivity.class);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        /*
+         * Save image to storage and return uri to post screen.
+         * Because image is too large so we can not pass it through intent.
+         * You should delete it once it is no longer needed.
+         */
         try {
-            Uri uri = Utils.saveBitmap(this, bitmap, Bitmap.CompressFormat.JPEG, "image/jpeg", "combine"+System.currentTimeMillis()+ ".jpg");
+            Uri uri = Utils.saveBitmap(this, bitmap, Bitmap.CompressFormat.JPEG, "image/jpeg", "combine" + System.currentTimeMillis() + ".jpg");
             intent.putExtra(IMAGE_RESULT, uri);
             setResult(RESULT_OK, intent);
         } catch (IOException e) {

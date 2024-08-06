@@ -19,11 +19,11 @@ import java.util.List;
 public class FilterItemAdapter extends RecyclerView.Adapter<FilterItemAdapter.ViewHolder> {
     private List<FilterItem> items;
     private OnClickListener listener;
-    private String uriString;
-    FilterItemAdapter(String uriString, List<FilterItem> items, OnClickListener listener){
+    private Uri uri;
+    FilterItemAdapter(Uri uri, List<FilterItem> items, OnClickListener listener){
         this.items = items;
         this.listener = listener;
-        this.uriString = uriString;
+        this.uri = uri;
     }
 
     @NonNull
@@ -53,7 +53,6 @@ public class FilterItemAdapter extends RecyclerView.Adapter<FilterItemAdapter.Vi
         public void setUpView(FilterItem item){
             ImageFilterView filterView = binding.ivImage;
             try {
-                Uri uri = Uri.parse(uriString);
                 InputStream inputStream = binding.getRoot().getContext().getContentResolver().openInputStream(uri);
                 Drawable drawable = Drawable.createFromStream(inputStream, uri.toString() );
                 filterView.setImageDrawable(drawable);

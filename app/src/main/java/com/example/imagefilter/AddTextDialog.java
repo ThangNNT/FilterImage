@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
@@ -45,9 +44,7 @@ public class AddTextDialog extends Dialog {
                 else if (binding.rdGreen.isChecked()){
                     color = Color.GREEN;
                 } else if (binding.rdGreen.isChecked()){
-                    color = Color.YELLOW
-
-                    ;
+                    color = Color.YELLOW;
                 }
                 else color = Color.WHITE;
                 listener.onConfirm(binding.edtText.getText().toString(), color);
