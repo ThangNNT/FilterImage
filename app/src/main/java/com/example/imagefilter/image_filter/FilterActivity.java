@@ -1,9 +1,11 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.imagefilter.R;
 import com.example.imagefilter.databinding.ActivityFilterBinding;
 
 import java.io.FileNotFoundException;

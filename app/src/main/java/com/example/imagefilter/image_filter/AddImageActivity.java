@@ -1,4 +1,4 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

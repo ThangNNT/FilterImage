@@ -1,16 +1,13 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.imagefilter.databinding.ItemFilterBinding;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -29,7 +26,7 @@ public class FilterItemAdapter extends RecyclerView.Adapter<FilterItemAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemFilterBinding binding = ItemFilterBinding.inflate(LayoutInflater.from(parent.getContext()),parent, false);
+        com.example.imagefilter.databinding.ItemFilterBinding binding = com.example.imagefilter.databinding.ItemFilterBinding.inflate(LayoutInflater.from(parent.getContext()),parent, false);
         return new ViewHolder(binding);
     }
 
@@ -44,8 +41,8 @@ public class FilterItemAdapter extends RecyclerView.Adapter<FilterItemAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public ItemFilterBinding binding;
-        public ViewHolder(ItemFilterBinding binding) {
+        public com.example.imagefilter.databinding.ItemFilterBinding binding;
+        public ViewHolder(com.example.imagefilter.databinding.ItemFilterBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

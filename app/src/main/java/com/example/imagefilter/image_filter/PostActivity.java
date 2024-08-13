@@ -1,9 +1,6 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +11,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.imagefilter.databinding.ActivityFilterBinding;
 import com.example.imagefilter.databinding.ActivityPostBinding;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 public class PostActivity extends AppCompatActivity {
     private ActivityPostBinding binding;

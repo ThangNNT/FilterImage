@@ -13,30 +13,29 @@
         android:theme="@style/Theme.ImageFilter"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".image_filter.MainActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
-            android:theme="@style/Theme.White.StatusBar"
-            android:name=".PostActivity"
-            android:exported="true">
+            android:name=".image_filter.PostActivity"
+            android:exported="true"
+            android:theme="@style/Theme.White.StatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".FilterActivity"
+            android:name=".image_filter.FilterActivity"
             android:exported="false" />
         <activity
-            android:theme="@style/Theme.Black.StatusBar"
-            android:name=".AddImageActivity"
-            android:exported="false" />
-
+            android:name=".image_filter.AddImageActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Black.StatusBar" />
     </application>
 
 </manifest>

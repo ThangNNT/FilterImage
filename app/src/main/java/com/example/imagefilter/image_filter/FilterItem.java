@@ -1,4 +1,4 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 /**
  * Please check ImageFilterView document below for more information <br/>

@@ -1,4 +1,4 @@
-package com.example.imagefilter;
+package com.example.imagefilter.image_filter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
