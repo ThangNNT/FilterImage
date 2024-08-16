@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_text"
+        android:text="Aa"
+        android:textStyle="bold"
+        android:layout_marginEnd="16dp"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <ImageView
+        android:id="@+id/iv_quote"
+        android:src="@drawable/ic_format_quote_24"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/iv_image"
+        android:src="@drawable/ic_add_image"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/iv_code_block"
+        android:src="@drawable/ic_code_24"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/iv_link"
+        android:src="@drawable/ic_insert_link_24"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/iv_list"
+        android:src="@drawable/ic_format_list_bulleted_24"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/iv_divider"
+        android:src="@drawable/ic_divider_24"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+</LinearLayout>
