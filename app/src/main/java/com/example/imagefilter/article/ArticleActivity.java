@@ -3,11 +3,14 @@ package com.example.imagefilter.article;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.imagefilter.article.dialog.AddAttachmentImageDialog;
+import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
+import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
 
 public class ArticleActivity extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class ArticleActivity extends AppCompatActivity {
         setUp();
     }
 
-    private void setUp(){
+    private void setUp() {
 //        binding.edt.setText("Helllo");
 //        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
 //        int start = 0;
@@ -30,26 +33,33 @@ public class ArticleActivity extends AppCompatActivity {
 //        int flag = Spannable.SPAN_INCLUSIVE_INCLUSIVE;
 //        binding.edt.getText().setSpan(boldSpan, start, end, flag);
         //binding.atImage.setImageUrl("https://ckbox.cloud/c05dc7b9f5550792f90b/assets/QQk6k6MuFhhP/images/1080.webp");
-        binding.tvBold.setOnClickListener((v)->{
+        binding.tvBold.setOnClickListener((v) -> {
             binding.edt.setBoldEnable(true);
         });
         binding.tvPreview.setOnClickListener((v) -> {
             startActivity(PreviewActivity.newIntent(this, getHtml()));
         });
-        binding.layoutAttachment.ivImage.setOnClickListener((v)->{
+        binding.layoutAttachment.ivImage.setOnClickListener((v) -> {
             showAddAttachmentImageDialog();
-        });}
+        });
+        binding.layoutAttachment.ivCodeBlock.setOnClickListener((v)->{
+            CodeBlockView codeBlockView = new CodeBlockView(this);
+            codeBlockView.setOnUpdateClickListener(view -> binding.layoutArticle.removeView(view));
+            binding.layoutArticle.addView(codeBlockView);
+        });
+    }
 
     private String getHtml(){
         int childCount = binding.layoutArticle.getChildCount();
         StringBuilder htmlResult = new StringBuilder();
         for (int i = 0; i < childCount; i++) {
             View child = binding.layoutArticle.getChildAt(i);
-            if (child instanceof AttachmentImage){
-                String html = ((AttachmentImage) child).getHtml();
+            if (child instanceof Attachable){
+                String html = ((Attachable) child).getHtml();
                 htmlResult.append(html);
             }
         }
+        Log.d("AAAAAAAAAAAAA", htmlResult.toString());
         return htmlResult.toString();
     }
 

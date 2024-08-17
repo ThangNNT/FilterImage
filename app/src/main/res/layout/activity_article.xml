@@ -72,14 +72,6 @@
                     android:layout_marginHorizontal="32dp"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"/>
-                <EditText
-                    android:background="#C8C8C8"
-                    android:paddingVertical="16dp"
-                    android:layout_marginHorizontal="24dp"
-                    android:textSize="14sp"
-                    android:paddingHorizontal="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
