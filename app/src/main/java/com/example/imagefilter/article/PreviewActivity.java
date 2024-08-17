@@ -2,6 +2,7 @@ package com.example.imagefilter.article;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class PreviewActivity extends AppCompatActivity {
         setUp();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void setUp(){
         String html = getIntent().getStringExtra(PREVIEW_HTML);
         if (html == null) return;
@@ -42,6 +44,8 @@ public class PreviewActivity extends AppCompatActivity {
         mBinding.webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mBinding.webview.getSettings().setUseWideViewPort(true);
         mBinding.webview.getSettings().setLoadWithOverviewMode(true);
+        mBinding.webview.getSettings().setJavaScriptEnabled(true);
+        mBinding.webview.getSettings().setAllowFileAccess(true);
         mBinding.webview.loadData(data, "text/html", "UTF-8");
     }
 

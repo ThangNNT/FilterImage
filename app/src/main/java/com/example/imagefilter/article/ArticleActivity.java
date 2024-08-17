@@ -11,6 +11,7 @@ import com.example.imagefilter.article.dialog.AddAttachmentImageDialog;
 import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
+import com.example.imagefilter.article.view.DividerView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
 
 public class ArticleActivity extends AppCompatActivity {
@@ -47,6 +48,11 @@ public class ArticleActivity extends AppCompatActivity {
             codeBlockView.setOnUpdateClickListener(view -> binding.layoutArticle.removeView(view));
             binding.layoutArticle.addView(codeBlockView);
         });
+        binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
+            DividerView dividerView = new DividerView((this));
+            dividerView.setOnUpdateClickListener( view -> binding.layoutArticle.removeView(view));
+            binding.layoutArticle.addView(dividerView);
+        });
     }
 
     private String getHtml(){
@@ -59,7 +65,6 @@ public class ArticleActivity extends AppCompatActivity {
                 htmlResult.append(html);
             }
         }
-        Log.d("AAAAAAAAAAAAA", htmlResult.toString());
         return htmlResult.toString();
     }
 
