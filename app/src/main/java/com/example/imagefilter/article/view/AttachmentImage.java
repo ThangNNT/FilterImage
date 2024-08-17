@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.imagefilter.R;
+import com.example.imagefilter.article.base.OnEditClickListener;
+import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewAttachmentImageBinding;
 
@@ -20,7 +22,8 @@ public class AttachmentImage extends LinearLayout implements Attachable {
     private String mUrl;
     private String mTitlte;
     private boolean showDeleteButton = false;
-    private OnUpdateClickListener onUpdateClickListener;
+    private OnRemoveClickListener mOnRemoveClickListener;
+    private OnEditClickListener mOnEditClickListener;
     public AttachmentImage(@NonNull Context context) {
         super(context);
         init();
@@ -98,21 +101,20 @@ public class AttachmentImage extends LinearLayout implements Attachable {
 
     private void handleUpdateClick(){
         mBinding.ivDelete.setOnClickListener((v)->{
-            if (onUpdateClickListener == null) return;
-            onUpdateClickListener.onDeleted(this);
+            if (mOnRemoveClickListener == null) return;
+            mOnRemoveClickListener.onRemove(this);
         });
         mBinding.ivEdit.setOnClickListener((v)->{
-            if (onUpdateClickListener == null) return;
-            onUpdateClickListener.onEdit(this);
+            if (mOnEditClickListener == null) return;
+            mOnEditClickListener.onEdit(this);
         });
     }
 
-    public void setOnUpdateClickListener(OnUpdateClickListener listener) {
-        onUpdateClickListener = listener;
+    public void setOnRemoveClickListener(OnRemoveClickListener mOnRemoveClickListener) {
+        this.mOnRemoveClickListener = mOnRemoveClickListener;
     }
 
-    public interface OnUpdateClickListener {
-        void onDeleted(AttachmentImage view);
-        void onEdit(AttachmentImage view);
+    public void setOnEditClickListener(OnEditClickListener mOnEditClickListener) {
+        this.mOnEditClickListener = mOnEditClickListener;
     }
 }

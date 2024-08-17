@@ -35,6 +35,31 @@ public class PreviewActivity extends AppCompatActivity {
                 "            body {" +
                 "             font-size: 1rem;" +
                 "            }" +
+                "           .simple-divider {" +
+                "               text-align: center;" +
+                "               margin: 20px 0;" +
+                "               }" +
+                "           .simple-divider span {" +
+                "                padding: 0 10px;" +
+                "                font-size: 32px;" +
+                "                color: gray;" +
+                "                letter-spacing: 8px;"+
+                "            }" +
+                "            blockquote {" +
+                "            font-style: italic;" +
+                "            padding-left: 32px;" +
+                "            margin: 20px 16px;" +
+                "            position: relative;" +
+                "             }" +
+                "            blockquote::before {" +
+                    "            content: \"\\0022\";" +
+                    "            font-size: 3rem;" +
+                    "            color: rgba(153, 153, 153, 1);" +
+                    "            position: absolute;" +
+                    "            left: 10px;" +
+                    "            top: -10px;" +
+                "                 }" +
+                "        }"+
                 "       </style>" +
                 "       <body style=\"margin: 0; padding: 0\">"
                             + html +

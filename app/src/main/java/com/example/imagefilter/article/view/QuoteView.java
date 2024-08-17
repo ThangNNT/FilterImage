@@ -10,46 +10,46 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.imagefilter.article.base.OnRemoveClickListener;
-import com.example.imagefilter.article.utils.Utils;
-import com.example.imagefilter.databinding.ViewCodeBlockBinding;
+import com.example.imagefilter.databinding.ViewQuoteBinding;
 
-public class CodeBlockView extends FrameLayout implements Attachable {
-
-    private ViewCodeBlockBinding mBinding;
+public class QuoteView extends FrameLayout implements Attachable {
+    private ViewQuoteBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
-    public CodeBlockView(@NonNull Context context) {
+    private boolean isDeleteButtonVisible;
+    public QuoteView(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public CodeBlockView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public QuoteView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CodeBlockView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public QuoteView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init(){
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        mBinding = ViewCodeBlockBinding.inflate(layoutInflater, this, true);
+        mBinding = ViewQuoteBinding.inflate(layoutInflater, this, true);
+        mBinding.ivDelete.setVisibility(isDeleteButtonVisible ? VISIBLE : GONE);
+        mBinding.ivDelete.setOnClickListener(v -> {
+            if (mOnRemoveClickListener == null) return;
+            mOnRemoveClickListener.onRemove(this);
+        });
         mBinding.edtContent.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 mBinding.ivDelete.setVisibility(View.VISIBLE);
             } else mBinding.ivDelete.setVisibility(View.GONE);
         });
-        mBinding.ivDelete.setOnClickListener((v)->{
-            if (mOnRemoveClickListener == null) return;
-            mOnRemoveClickListener.onRemove(this);
-        });
     }
+
     @Override
     public String getHtml() {
-        String text = mBinding.edtContent.getText().toString();
-        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
-        return "<p style=\"background-color:rgba(221, 221, 221, 1); padding: 16px 8px 16px 8px; font-size: "+textSize+"px; margin: 16px 16px 0 16px; white-space: normal; word-wrap: break-word;\"><code>"+text+"</code></p>";
+        String quote = mBinding.edtContent.getText().toString();
+        return "<blockquote>" + quote + " </blockquote>";
     }
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {

@@ -3,7 +3,6 @@ package com.example.imagefilter.article;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,6 +11,7 @@ import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
+import com.example.imagefilter.article.view.QuoteView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
 
 public class ArticleActivity extends AppCompatActivity {
@@ -45,13 +45,18 @@ public class ArticleActivity extends AppCompatActivity {
         });
         binding.layoutAttachment.ivCodeBlock.setOnClickListener((v)->{
             CodeBlockView codeBlockView = new CodeBlockView(this);
-            codeBlockView.setOnUpdateClickListener(view -> binding.layoutArticle.removeView(view));
+            codeBlockView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
             binding.layoutArticle.addView(codeBlockView);
         });
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
             DividerView dividerView = new DividerView((this));
-            dividerView.setOnUpdateClickListener( view -> binding.layoutArticle.removeView(view));
+            dividerView.setOnRemoveClickListener( view -> binding.layoutArticle.removeView(view));
             binding.layoutArticle.addView(dividerView);
+        });
+        binding.layoutAttachment.ivQuote.setOnClickListener((v) -> {
+            QuoteView quoteView = new QuoteView(this);
+            quoteView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
+            binding.layoutArticle.addView(quoteView);
         });
     }
 
@@ -72,16 +77,13 @@ public class ArticleActivity extends AppCompatActivity {
         AddAttachmentImageDialog dialog = new AddAttachmentImageDialog(this);
         dialog.setListener((data)->{
             AttachmentImage attachmentImage = new AttachmentImage((this));
-            attachmentImage.setOnUpdateClickListener(new AttachmentImage.OnUpdateClickListener() {
-                @Override
-                public void onDeleted(AttachmentImage view) {
-                    ViewGroup parent = (ViewGroup) view.getParent();
-                    parent.removeView(view);
-                }
-
-                @Override
-                public void onEdit(AttachmentImage view) {
-                    showEditAttachmentImageDialog(view);
+            attachmentImage.setOnRemoveClickListener((v) -> {
+                ViewGroup parent = (ViewGroup) v.getParent();
+                parent.removeView(v);
+            });
+            attachmentImage.setOnEditClickListener((v) -> {
+                if (v instanceof AttachmentImage) {
+                    showEditAttachmentImageDialog((AttachmentImage) v);
                 }
             });
             attachmentImage.setImageUrl(data.getUrl());

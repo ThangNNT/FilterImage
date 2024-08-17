@@ -8,12 +8,13 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.databinding.ViewDividerBinding;
 
 public class DividerView extends FrameLayout implements Attachable {
     private boolean mDisplayDelete = false;
 
-    private OnUpdateClickListener mOnUpdateClickListener;
+    private OnRemoveClickListener mOnRemoveClickListener;
 
     public DividerView(@NonNull Context context) {
         super(context);
@@ -40,34 +41,18 @@ public class DividerView extends FrameLayout implements Attachable {
             mBinding.ivDelete.setVisibility(mDisplayDelete ? VISIBLE : GONE);
         });
         mBinding.ivDelete.setOnClickListener((v) -> {
-            if (mOnUpdateClickListener == null) return;
-            mOnUpdateClickListener.onDeleted(this);
+            if (mOnRemoveClickListener == null) return;
+            mOnRemoveClickListener.onRemove(this);
         });
     }
 
-    public void setOnUpdateClickListener(OnUpdateClickListener mOnUpdateClickListener) {
-        this.mOnUpdateClickListener = mOnUpdateClickListener;
+    public void setOnRemoveClickListener(OnRemoveClickListener listener) {
+        this.mOnRemoveClickListener = listener;
     }
 
 
     @Override
     public String getHtml() {
-        return "<style>" +
-                "  .simple-divider {" +
-                "    text-align: center;" +
-                "    margin: 20px 0;" +
-                "  }" +
-                "  .simple-divider span {" +
-                "    padding: 0 10px;" +
-                "    font-size: 32px;" +
-                "    color: gray;" +
-                "    letter-spacing: 8px;"+
-                "  }" +
-                "</style>" +
-                "<div class=\"simple-divider\"><span>•••</span></div>";
-    }
-
-    public interface OnUpdateClickListener {
-        void onDeleted(DividerView view);
+        return "<div class=\"simple-divider\"><span>•••</span></div>";
     }
 }
