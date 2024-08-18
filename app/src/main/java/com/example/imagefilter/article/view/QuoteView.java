@@ -15,7 +15,6 @@ import com.example.imagefilter.databinding.ViewQuoteBinding;
 public class QuoteView extends FrameLayout implements Attachable {
     private ViewQuoteBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
-    private boolean isDeleteButtonVisible;
     public QuoteView(@NonNull Context context) {
         super(context);
         init();
@@ -34,7 +33,7 @@ public class QuoteView extends FrameLayout implements Attachable {
     private void init(){
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         mBinding = ViewQuoteBinding.inflate(layoutInflater, this, true);
-        mBinding.ivDelete.setVisibility(isDeleteButtonVisible ? VISIBLE : GONE);
+        mBinding.ivDelete.setVisibility(GONE);
         mBinding.ivDelete.setOnClickListener(v -> {
             if (mOnRemoveClickListener == null) return;
             mOnRemoveClickListener.onRemove(this);

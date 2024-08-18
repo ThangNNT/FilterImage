@@ -51,6 +51,15 @@ public class PreviewActivity extends AppCompatActivity {
                 "            margin: 20px 16px;" +
                 "            position: relative;" +
                 "             }" +
+                "           ul {"+
+                "                 margin-top: 10px;" +
+                "           }" +
+                "           ul li {" +
+                "                 margin-bottom: 10px;" +
+                "           }" +
+                "           ul li:last-child {" +
+                "                margin-bottom: 0;" +
+                "            }"+
                 "            blockquote::before {" +
                     "            content: \"\\0022\";" +
                     "            font-size: 3rem;" +
