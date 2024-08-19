@@ -13,6 +13,7 @@ import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
+import com.example.imagefilter.article.view.HeaderView;
 import com.example.imagefilter.article.view.QuoteView;
 import com.example.imagefilter.article.view.UnorderedListView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
@@ -40,6 +41,7 @@ public class ArticleActivity extends AppCompatActivity {
 //        binding.tvBold.setOnClickListener((v) -> {
 //            binding.edt.setBoldEnable(true);
 //        });
+        binding.layoutArticle.addView(new HeaderView((this)));
         binding.tvPreview.setOnClickListener((v) -> {
             startActivity(PreviewActivity.newIntent(this, getHtml()));
         });

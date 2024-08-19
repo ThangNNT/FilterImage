@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.imagefilter.article.base.OnRemoveClickListener;
+import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewQuoteBinding;
 
 public class QuoteView extends FrameLayout implements Attachable {
@@ -48,7 +49,8 @@ public class QuoteView extends FrameLayout implements Attachable {
     @Override
     public String getHtml() {
         String quote = mBinding.edtContent.getText().toString();
-        return "<blockquote>" + quote + " </blockquote>";
+        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
+        return "<blockquote style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">" + quote + " </blockquote>";
     }
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
