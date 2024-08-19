@@ -40,4 +40,11 @@ public class HeaderView extends FrameLayout implements Attachable {
         int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtHeader.getTextSize());
         return "<h3 style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word; margin: 16px 16px 0 16px;\">"+text+"</h3>";
     }
+
+    @Override
+    public void focus() {
+        mBinding.edtHeader.requestFocus();
+        Utils.showKeyboard(getContext(), mBinding.edtHeader);
+
+    }
 }

@@ -55,4 +55,9 @@ public class DividerView extends FrameLayout implements Attachable {
     public String getHtml() {
         return "<div class=\"simple-divider\"><span>•••</span></div>";
     }
+
+    @Override
+    public void focus() {
+
+    }
 }

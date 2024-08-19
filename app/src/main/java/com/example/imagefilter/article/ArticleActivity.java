@@ -32,16 +32,6 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
     private void setUp() {
-//        binding.edt.setText("Helllo");
-//        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-//        int start = 0;
-//        int end = 2;
-//        int flag = Spannable.SPAN_INCLUSIVE_INCLUSIVE;
-//        binding.edt.getText().setSpan(boldSpan, start, end, flag);
-        //binding.atImage.setImageUrl("https://ckbox.cloud/c05dc7b9f5550792f90b/assets/QQk6k6MuFhhP/images/1080.webp");
-//        binding.tvBold.setOnClickListener((v) -> {
-//            binding.edt.setBoldEnable(true);
-//        });
         binding.layoutArticle.addView(new HeaderView((this)));
         binding.tvPreview.setOnClickListener((v) -> {
             startActivity(PreviewActivity.newIntent(this, getHtml()));
@@ -58,6 +48,7 @@ public class ArticleActivity extends AppCompatActivity {
             CodeBlockView codeBlockView = new CodeBlockView(this);
             codeBlockView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
             binding.layoutArticle.addView(codeBlockView);
+            codeBlockView.focus();
         });
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
             DividerView dividerView = new DividerView((this));
@@ -68,6 +59,7 @@ public class ArticleActivity extends AppCompatActivity {
             QuoteView quoteView = new QuoteView(this);
             quoteView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
             binding.layoutArticle.addView(quoteView);
+            quoteView.focus();
         });
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
             addUnorderedListView(null, -1);
@@ -124,7 +116,6 @@ public class ArticleActivity extends AppCompatActivity {
         } else
             binding.layoutArticle.addView(unorderedListView);
         unorderedListView.focus();
-        Utils.showKeyboard(this, unorderedListView.getEditText());
     }
 
     private void showAddAttachmentImageDialog(){
@@ -142,6 +133,7 @@ public class ArticleActivity extends AppCompatActivity {
             });
             attachmentImage.setImageUrl(data.getUrl());
             binding.layoutArticle.addView(attachmentImage);
+            attachmentImage.focus();
         });
         dialog.show();
     }

@@ -98,8 +98,10 @@ public class UnorderedListView extends FrameLayout implements Attachable {
         mBinding.edtContent.setText(text);
     }
 
+    @Override
     public void focus(){
         mBinding.edtContent.requestFocus();
+        Utils.showKeyboard(getContext(), mBinding.edtContent);
     }
 
     public EditText getEditText(){

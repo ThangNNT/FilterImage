@@ -71,6 +71,14 @@ public class AttachmentImage extends LinearLayout implements Attachable {
         return builder.toString();
     }
 
+    @Override
+    public void focus() {
+        mBinding.edtTitle.requestFocus();
+        Utils.showKeyboard(getContext(), mBinding.edtTitle);
+        showDeleteButton = true;
+        handleModifiersLayoutVisibility();
+    }
+
     private void handleEditText(){
         mBinding.edtTitle.addTextChangedListener(new TextWatcher() {
             @Override

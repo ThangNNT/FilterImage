@@ -53,6 +53,12 @@ public class QuoteView extends FrameLayout implements Attachable {
         return "<blockquote style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">" + quote + " </blockquote>";
     }
 
+    @Override
+    public void focus() {
+        mBinding.edtContent.requestFocus();
+        Utils.showKeyboard(getContext(), mBinding.edtContent);
+    }
+
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
         this.mOnRemoveClickListener = listener;
     }

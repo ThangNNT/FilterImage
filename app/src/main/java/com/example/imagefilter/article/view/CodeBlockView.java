@@ -52,6 +52,13 @@ public class CodeBlockView extends FrameLayout implements Attachable {
         return "<p style=\"background-color:rgba(221, 221, 221, 1); padding: 16px 8px 16px 8px; font-size: "+textSize+"px; margin: 16px 16px 0 16px; white-space: normal; word-wrap: break-word;\"><code>"+text+"</code></p>";
     }
 
+    @Override
+    public void focus() {
+        mBinding.edtContent.requestFocus();
+        Utils.showKeyboard(getContext(), mBinding.edtContent);
+
+    }
+
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
         this.mOnRemoveClickListener = listener;
     }

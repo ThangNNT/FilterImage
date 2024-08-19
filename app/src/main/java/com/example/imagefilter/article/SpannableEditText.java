@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.example.imagefilter.R;
+import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.article.view.Attachable;
 
 import java.util.ArrayList;
@@ -134,5 +135,11 @@ public class SpannableEditText extends AppCompatEditText implements Attachable {
     @Override
     public String getHtml() {
         return Html.toHtml(getEditableText(), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
+    }
+
+    @Override
+    public void focus() {
+        requestFocus();
+        Utils.showKeyboard(getContext(), this);
     }
 }
