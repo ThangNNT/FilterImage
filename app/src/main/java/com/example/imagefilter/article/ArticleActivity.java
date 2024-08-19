@@ -15,6 +15,7 @@ import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
 import com.example.imagefilter.article.view.HeaderView;
 import com.example.imagefilter.article.view.QuoteView;
+import com.example.imagefilter.article.view.TextAttachmentView;
 import com.example.imagefilter.article.view.UnorderedListView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
 
@@ -44,6 +45,11 @@ public class ArticleActivity extends AppCompatActivity {
         binding.layoutArticle.addView(new HeaderView((this)));
         binding.tvPreview.setOnClickListener((v) -> {
             startActivity(PreviewActivity.newIntent(this, getHtml()));
+        });
+        binding.layoutAttachment.tvText.setOnClickListener(v -> {
+            TextAttachmentView editText = new TextAttachmentView(this);
+            binding.layoutArticle.addView(editText);
+            editText.focus();
         });
         binding.layoutAttachment.ivImage.setOnClickListener((v) -> {
             showAddAttachmentImageDialog();

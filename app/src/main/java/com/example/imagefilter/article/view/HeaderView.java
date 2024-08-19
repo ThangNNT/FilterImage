@@ -38,6 +38,6 @@ public class HeaderView extends FrameLayout implements Attachable {
     public String getHtml() {
         String text = mBinding.edtHeader.getText().toString();
         int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtHeader.getTextSize());
-        return "<h3 style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">"+text+"</h3>";
+        return "<h3 style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word; margin: 16px 16px 0 16px;\">"+text+"</h3>";
     }
 }

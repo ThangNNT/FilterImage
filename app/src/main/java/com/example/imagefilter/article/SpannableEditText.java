@@ -3,24 +3,26 @@ package com.example.imagefilter.article;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Editable;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import java.util.ArrayList;
+import com.example.imagefilter.R;
+import com.example.imagefilter.article.view.Attachable;
 
-public class SpannableEditText extends AppCompatEditText {
-    private static final int INDEX_NOT_FOUND = -1;
-    private CharSequence mPrevText;
-    private ArrayList<SpanInfo> spanMap = new ArrayList<>();
-    private ArrayList<SpanInfo> tempMap = new ArrayList<>();
-    private boolean boldEnable = false;
-    private boolean italicEnable = false;
-    private boolean underlineEnable = false;
+import java.util.ArrayList;
+import java.util.Objects;
+
+public class SpannableEditText extends AppCompatEditText implements Attachable {
 
     public SpannableEditText(Context context) {
         super(context);
@@ -37,296 +39,100 @@ public class SpannableEditText extends AppCompatEditText {
         setUp();
     }
 
-    private void setUp(){
-        addTextChangedListener(new TextWatcher() {
+    private void setUp() {
+        setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
-            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
-                Log.d("AAAAAAAAAAAAA", "beforeTextChanged: " + text.toString() + ", start: " + start + ", count: " + count + ", after: " + after);
-                mPrevText = text.toString();
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.editext_custom_menu, menu);
+                return true;
+
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("AAAAAAAAAAAA", "mPrevText: "+ mPrevText.toString());
-                Log.d("AAAAAAAAAAAAA", "onTextChanged: " + s.toString() + ", start: " + start + ", before: " + before + ", count: " + count);
-                int diffIndex = findIndexOfDifferentStart(mPrevText, s);
-                if (isDeleteText(mPrevText, s) ){
-                    Log.d("AAAAAAAAAAAA", "isDeleteText");
-                    onHandleDeleted(diffIndex, before);
-                }
-                if (isAddText(mPrevText, s)){
-                    Log.d("AAAAAAAAAAAA", "isAddText");
-                    // empty case
-                    if (mPrevText.length() == 0){
-                        spanMap.add(new SpanInfo(0, count, boldEnable, italicEnable, underlineEnable, false, ""));
-                        tempMap = SpannableEditText.this.clone(spanMap);
-                    }else if(start == mPrevText.length()){
-                        //insert on last
-                        if (spanMap.size()>0){
-                            SpanInfo lastSpan = spanMap.get(spanMap.size()-1);
-                            if (match(lastSpan)){
-                                int end = lastSpan.getEnd();
-                                lastSpan.setEnd(end+1);
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                Editable text = getText();
+                if (text == null) return false;
+                int selectionStart = getSelectionStart();
+                int selectionEnd = getSelectionEnd();
+                if (item.getItemId() == R.id.action_bold) {
+                    StyleSpan[] styleSpans = text.getSpans(selectionStart, selectionEnd, StyleSpan.class);
+                    boolean hasBoldSpan = false;
+                    // if span exist, remove span
+                    for (StyleSpan span : styleSpans) {
+                        if (span.getStyle() == Typeface.BOLD) {
+                            hasBoldSpan = true;
+                            int spanStart = text.getSpanStart(span);
+                            int spanEnd = text.getSpanEnd(span);
+                            if (spanStart < selectionStart) {
+                                text.setSpan(new StyleSpan(Typeface.BOLD), spanStart, selectionStart, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                             }
-                            else {
-                                spanMap.add(new SpanInfo(spanMap.size(), spanMap.size()+count, boldEnable, italicEnable, underlineEnable, false, ""));
-                                tempMap = SpannableEditText.this.clone(spanMap);
+                            if (spanEnd > selectionEnd) {
+                                text.setSpan(new StyleSpan(Typeface.BOLD), selectionEnd, spanEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                             }
+                            text.removeSpan(span);
                         }
-                    } else {
-                        boolean isBeforeMatch = false;
-                        int positionOffset = 0;
-                        for(int i = 0; i< spanMap.size(); i++){
-                            SpanInfo spanItem = spanMap.get(i);
-                            int spanStart = spanItem.getStart();
-                            int spanEnd = spanItem.getEnd();
-                            if (isBeforeMatch){
-                                spanItem.setStart(spanStart+count);
-                                spanItem.setEnd(spanEnd+count);
-                            }
-                            else if (diffIndex >= spanStart && diffIndex+count<=spanEnd){
-                                // span property of span item is the same view span setting
-                                if (match(spanItem)){
-                                    spanItem.setEnd(spanEnd+count);
-                                    isBeforeMatch = true;
-                                } else if (spanStart == diffIndex){
-                                    SpanInfo newSpan = spanItem.clone();
-
-                                    spanItem.setEnd(diffIndex + count);
-                                    setViewTextSpanToSpanInfo(spanItem);
-
-                                    newSpan.setStart(spanStart + count);
-                                    newSpan.setEnd(spanEnd + count);
-                                    tempMap.add(i + 1 + positionOffset, newSpan);
-                                    positionOffset++;
-                                    isBeforeMatch = true;
-                                }
-                                else if (spanEnd == diffIndex+count){
-                                    SpanInfo newSpan = spanItem.clone();
-                                    spanItem.setEnd(diffIndex-1);
-                                    setViewTextSpanToSpanInfo(newSpan);
-                                    newSpan.setStart(diffIndex);
-                                    tempMap.add(i+1+positionOffset, newSpan);
-                                    isBeforeMatch = true;
-                                }
-                                else {
-                                    SpanInfo newSpan = spanItem.clone();
-                                    SpanInfo newOldSpan = spanItem.clone();
-
-                                    spanItem.setEnd(diffIndex-1);
-
-                                    newSpan.setStart(diffIndex);
-                                    newSpan.setEnd(diffIndex+count);
-                                    setViewTextSpanToSpanInfo(newSpan);
-                                    tempMap.add(i+positionOffset+1, newSpan);
-                                    positionOffset++;
-
-                                    newOldSpan.setStart(newOldSpan.getStart()+1);
-                                    newOldSpan.setEnd(spanEnd+count);
-                                    tempMap.add(i+positionOffset+1, newOldSpan);
-                                    positionOffset++;
-                                    isBeforeMatch = true;
-
-                                }
-                            }
-                        }
-                        spanMap = SpannableEditText.this.clone(tempMap);
                     }
+                    // if span does not exist, add span
+                    if (!hasBoldSpan) {
+                        text.setSpan(new StyleSpan(Typeface.BOLD), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    }
+                    return true;
+                } else if (item.getItemId() == R.id.action_italic) {
+                    StyleSpan[] styleSpans = text.getSpans(selectionStart, selectionEnd, StyleSpan.class);
+                    boolean hasItalicSpan = false;
+                    for (StyleSpan span : styleSpans) {
+                        if (span.getStyle() == Typeface.ITALIC) {
+                            hasItalicSpan = true;
+                            int spanStart = text.getSpanStart(span);
+                            int spanEnd = text.getSpanEnd(span);
+                            if (spanStart < selectionStart) {
+                                text.setSpan(new StyleSpan(Typeface.ITALIC), spanStart, selectionStart, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            }
+                            if (spanEnd > selectionEnd) {
+                                text.setSpan(new StyleSpan(Typeface.ITALIC), selectionEnd, spanEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            }
+                            text.removeSpan(span);
+                        }
+                    }
+                    if (!hasItalicSpan) {
+                        text.setSpan(new StyleSpan(Typeface.ITALIC), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    }
+                    return true;
+                } else if (item.getItemId() == R.id.action_underline) {
+                    UnderlineSpan[] spans = text.getSpans(selectionStart, selectionEnd, UnderlineSpan.class);
+                    for (UnderlineSpan span : spans) {
+                        int spanStart = text.getSpanStart(span);
+                        int spanEnd = text.getSpanEnd(span);
+                        if (spanStart < selectionStart) {
+                            text.setSpan(new UnderlineSpan(), spanStart, selectionStart, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        }
+                        if (spanEnd > selectionEnd) {
+                            text.setSpan(new UnderlineSpan(), selectionEnd, spanEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        }
+                        text.removeSpan(span);
+                    }
+                    if (spans.length == 0) {
+                        text.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    }
+                    return true;
                 }
+                return false;
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                notifySpanChanged();
+            public void onDestroyActionMode(ActionMode mode) {
+
             }
         });
     }
 
-    private void notifySpanChanged(){
-        try {
-//            Objects.requireNonNull(getText()).clearSpans();
-            for (SpanInfo spanItem: spanMap){
-                if (spanItem.isBold()){
-                    StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-                    int flag = Spannable.SPAN_INCLUSIVE_INCLUSIVE;
-                    Log.d("AAAAAAAAAAA", "notifySpanChanged: "+spanItem.getStart() +", "+ spanItem.getEnd());
-                    getText().setSpan(boldSpan, spanItem.getStart(), spanItem.getEnd(), flag);
-                }
-            }
-        }
-        catch (NullPointerException ex){
-            ex.printStackTrace();
-            Log.d("AAAAAAAAAAAAAAAA", ex.getMessage());
-        }
-    }
-
-    private void onHandleDeleted(int diffIndex, int deletionCount){
-        Log.d("AAAAAAAAAAAAAA", "onHandleDeleted: "+diffIndex);
-        if ("".equals(getText())){
-            spanMap.clear();
-            tempMap.clear();
-            return;
-        }
-        for (SpanInfo spanItem : spanMap) {
-            if (diffIndex <= spanItem.getStart()) {
-                int spanStart = spanItem.getStart();
-                int spanEnd = spanItem.getEnd();
-                spanItem.setStart(spanStart - deletionCount);
-                spanItem.setEnd(spanEnd - deletionCount);
-            } else if (diffIndex > spanItem.getStart() && diffIndex <= spanItem.getEnd()) {
-                spanItem.setEnd(spanItem.getEnd() - deletionCount);
-            }
-        }
-    }
-
-    private void onHandleAdded(int diffIndex, int count, int startPosition){
-        if (mPrevText.length() == 0){
-            spanMap.add(new SpanInfo(0, count-1, boldEnable, italicEnable, underlineEnable, false, ""));
-            tempMap = SpannableEditText.this.clone(spanMap);
-        }else if(startPosition == mPrevText.length()){
-            //insert on last
-            if (spanMap.size()>0){
-                SpanInfo lastSpan = spanMap.get(spanMap.size()-1);
-                if (match(lastSpan)){
-                    int end = lastSpan.getEnd();
-                    lastSpan.setEnd(end+1);
-                }
-                else {
-                    spanMap.add(new SpanInfo(spanMap.size(), spanMap.size()+count, boldEnable, italicEnable, underlineEnable, false, ""));
-                    tempMap = SpannableEditText.this.clone(spanMap);
-                }
-            }
-        }
-        else {
-            boolean isMatchBefore = false;
-            int positionOffset = 0;
-            for(int i = 0; i< spanMap.size(); i++){
-                SpanInfo spanItem = spanMap.get(i);
-                int spanStart = spanItem.getStart();
-                int spanEnd = spanItem.getEnd();
-                if (isMatchBefore){
-                    spanItem.setStart(spanStart+count);
-                    spanItem.setEnd(spanEnd+count);
-                }
-                else if (diffIndex >= spanStart && diffIndex+count<=spanEnd){
-                    // span property of span item is the same view span setting
-                    if (match(spanItem)){
-                        spanItem.setEnd(spanEnd+count);
-                        isMatchBefore = true;
-                    } else if (spanStart == diffIndex){
-                        SpanInfo newSpan = spanItem.clone();
-
-                        spanItem.setEnd(diffIndex + count);
-                        setViewTextSpanToSpanInfo(spanItem);
-
-                        newSpan.setStart(spanStart + count);
-                        newSpan.setEnd(spanEnd + count);
-                        tempMap.add(i + 1 + positionOffset, newSpan);
-                        positionOffset++;
-                        isMatchBefore = true;
-                    }
-                    else if (spanEnd == diffIndex+count){
-                        SpanInfo newSpan = spanItem.clone();
-                        spanItem.setEnd(diffIndex-1);
-                        setViewTextSpanToSpanInfo(newSpan);
-                        newSpan.setStart(diffIndex);
-                        tempMap.add(i+1+positionOffset, newSpan);
-                        isMatchBefore = true;
-                    }
-                    else {
-                        SpanInfo newSpan = spanItem.clone();
-                        SpanInfo newOldSpan = spanItem.clone();
-
-                        spanItem.setEnd(diffIndex-1);
-
-                        newSpan.setStart(diffIndex);
-                        newSpan.setEnd(diffIndex+count);
-                        setViewTextSpanToSpanInfo(newSpan);
-                        tempMap.add(i+positionOffset+1, newSpan);
-                        positionOffset++;
-
-                        newOldSpan.setStart(newOldSpan.getStart()+1);
-                        newOldSpan.setEnd(spanEnd+count);
-                        tempMap.add(i+positionOffset+1, newOldSpan);
-                        positionOffset++;
-                        isMatchBefore = true;
-                    }
-                }
-            }
-            spanMap = SpannableEditText.this.clone(tempMap);
-
-        }
-    }
-
-    /**
-     *
-     * @param prevText
-     * @param currentText
-     * @return text changed position start
-     */
-    private int findIndexOfDifferentStart(CharSequence prevText, CharSequence currentText){
-        int currentLength = currentText.length();
-        int prevLength = prevText.length();
-        int i;
-        for (i = 0; i < currentLength && i < prevLength; ++i) {
-            if (currentText.charAt(i) != prevText.charAt(i)) {
-                break;
-            }
-        }
-        if (i < currentLength || i < prevLength) {
-            return i;
-        }
-        return INDEX_NOT_FOUND;
-    }
-
-    private boolean isDeleteText(CharSequence prevText, CharSequence currentText){
-        return prevText.length()>currentText.length();
-    }
-
-    private boolean isAddText(CharSequence prevText, CharSequence currentText){
-        return prevText.length() < currentText.length();
-    }
-
-    public void setBoldEnable(boolean boldEnable) {
-        Log.d("AAAAAAAAAAAAAA", "setBoldEnable: "+boldEnable);
-        this.boldEnable = boldEnable;
-    }
-
-    public void setItalicEnable(boolean italicEnable) {
-        this.italicEnable = italicEnable;
-    }
-
-    public void setUnderlineEnable(boolean underlineEnable) {
-        this.underlineEnable = underlineEnable;
-    }
-
-    public boolean isBoldEnable() {
-        return boldEnable;
-    }
-
-    public boolean isItalicEnable() {
-        return italicEnable;
-    }
-
-    public boolean isUnderlineEnable() {
-        return underlineEnable;
-    }
-
-    private boolean match(SpanInfo spanInfo){
-        return spanInfo.isBold() == boldEnable && spanInfo.isItalic() == italicEnable && spanInfo.isUnderline() == underlineEnable;
-    }
-
-    private void setViewTextSpanToSpanInfo(SpanInfo spanInfo){
-        spanInfo.setBold(boldEnable);
-        spanInfo.setItalic(italicEnable);
-        spanInfo.setUnderline(underlineEnable);
-    }
-
-    private ArrayList<SpanInfo> clone(ArrayList<SpanInfo> spans){
-        ArrayList<SpanInfo> cloneList = new ArrayList<>();
-        spans.forEach((item)->{
-                cloneList.add(item.clone());
-        });
-        return cloneList;
+    @Override
+    public String getHtml() {
+        return Html.toHtml(getEditableText(), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
     }
 }
