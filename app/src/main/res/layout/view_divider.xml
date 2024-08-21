@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:focusable="true"
     android:clickable="true"
+    android:layout_marginHorizontal="16dp"
     android:focusableInTouchMode="true"
     android:layout_height="wrap_content">
     <View

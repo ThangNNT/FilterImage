@@ -15,7 +15,7 @@
             android:src="@drawable/ic_format_quote_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <EditText
+        <com.example.imagefilter.article.SpannableEditText
             android:id="@+id/edt_content"
             android:hint="Input your quote"
             android:layout_marginTop="4dp"

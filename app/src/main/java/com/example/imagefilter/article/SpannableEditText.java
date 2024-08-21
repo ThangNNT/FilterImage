@@ -5,8 +5,10 @@ import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,11 +22,12 @@ import com.example.imagefilter.R;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.Focusable;
+import com.example.imagefilter.article.view.Linkable;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SpannableEditText extends AppCompatEditText implements Attachable, Focusable {
+public class SpannableEditText extends AppCompatEditText implements Attachable, Focusable, Linkable {
 
     public SpannableEditText(Context context) {
         super(context);
@@ -142,5 +145,16 @@ public class SpannableEditText extends AppCompatEditText implements Attachable, 
     public void focus() {
         requestFocus();
         Utils.showKeyboard(getContext(), this);
+    }
+
+    @Override
+    public void setLink(String text, String url) {
+        Editable editable = getText();
+        if (editable == null) return;
+        int selectedStart = getSelectionStart();
+        editable.insert(selectedStart, text);
+        setSelection(selectedStart + text.length());
+        editable.setSpan(new URLSpan(url), selectedStart, selectedStart + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
     }
 }

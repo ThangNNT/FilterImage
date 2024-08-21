@@ -16,7 +16,7 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewTextBinding;
 
-public class TextAttachmentView extends FrameLayout implements Attachable, Focusable {
+public class TextAttachmentView extends FrameLayout implements Attachable, Focusable, Linkable {
     private ViewTextBinding mBinding;
     private View.OnFocusChangeListener mOnFocusChangeListener;
     private OnRemoveClickListener mOnRemoveClickListener;
@@ -60,13 +60,9 @@ public class TextAttachmentView extends FrameLayout implements Attachable, Focus
         Utils.showKeyboard(getContext(), mBinding.edtContent);
     }
 
+    @Override
     public void setLink(String text, String url){
-        Editable editable = mBinding.edtContent.getText();
-        if (editable == null) return;
-        int selectedStart = mBinding.edtContent.getSelectionStart();
-        editable.insert(selectedStart, text);
-        mBinding.edtContent.setSelection(selectedStart + text.length());
-        editable.setSpan(new URLSpan(url), selectedStart, selectedStart + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+         mBinding.edtContent.setLink(text, url);
     }
 
 

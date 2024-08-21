@@ -13,7 +13,7 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewQuoteBinding;
 
-public class QuoteView extends FrameLayout implements Attachable, Focusable {
+public class QuoteView extends FrameLayout implements Attachable, Focusable, Linkable {
     private ViewQuoteBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
     private OnFocusChangeListener mOnFocusChangeListener;
@@ -50,7 +50,7 @@ public class QuoteView extends FrameLayout implements Attachable, Focusable {
 
     @Override
     public String getHtml() {
-        String quote = mBinding.edtContent.getText().toString();
+        String quote = mBinding.edtContent.getHtml();
         int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
         return "<blockquote style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">" + quote + " </blockquote>";
     }
@@ -67,5 +67,10 @@ public class QuoteView extends FrameLayout implements Attachable, Focusable {
 
     public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
         this.mOnFocusChangeListener = mOnFocusChangeListener;
+    }
+
+    @Override
+    public void setLink(String text, String url) {
+        mBinding.edtContent.setLink(text, url);
     }
 }

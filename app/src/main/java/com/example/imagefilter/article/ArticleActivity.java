@@ -15,6 +15,7 @@ import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
 import com.example.imagefilter.article.view.Focusable;
 import com.example.imagefilter.article.view.HeaderView;
+import com.example.imagefilter.article.view.Linkable;
 import com.example.imagefilter.article.view.QuoteView;
 import com.example.imagefilter.article.view.TextAttachmentView;
 import com.example.imagefilter.article.view.UnorderedListView;
@@ -38,6 +39,7 @@ public class ArticleActivity extends AppCompatActivity {
         binding.tvPreview.setOnClickListener((v) -> {
             startActivity(PreviewActivity.newIntent(this, getHtml()));
         });
+        // Text
         binding.layoutAttachment.tvText.setOnClickListener(v -> {
             TextAttachmentView editText = new TextAttachmentView(this);
             editText.setOnFocusChangeListener(((view, hasFocus) -> {;
@@ -53,9 +55,11 @@ public class ArticleActivity extends AppCompatActivity {
             binding.layoutArticle.addView(editText);
             editText.focus();
         });
+        // image
         binding.layoutAttachment.ivImage.setOnClickListener((v) -> {
             showAddAttachmentImageDialog();
         });
+        // code block
         binding.layoutAttachment.ivCodeBlock.setOnClickListener((v)->{
             CodeBlockView codeBlockView = new CodeBlockView(this);
             codeBlockView.setOnRemoveClickListener(this::removeView);
@@ -65,6 +69,7 @@ public class ArticleActivity extends AppCompatActivity {
             binding.layoutArticle.addView(codeBlockView);
             codeBlockView.focus();
         });
+        // divider
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
             DividerView dividerView = new DividerView((this));
             dividerView.setOnRemoveClickListener(this::removeView);
@@ -74,28 +79,30 @@ public class ArticleActivity extends AppCompatActivity {
             binding.layoutArticle.addView(dividerView);
             dividerView.focus();
         });
+        // quote
         binding.layoutAttachment.ivQuote.setOnClickListener((v) -> {
             QuoteView quoteView = new QuoteView(this);
             quoteView.setOnRemoveClickListener(this::removeView);
             quoteView.setOnFocusChangeListener((view, hasFocus) -> {
                 if (hasFocus) currentFocusChild = view;
+                binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
             });
             binding.layoutArticle.addView(quoteView);
             quoteView.focus();
         });
+        // ul list
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
             addUnorderedListView(null, -1);
         });
-
+        // link
         binding.layoutAttachment.ivLink.setOnClickListener((v)-> {
-            if (currentFocusChild instanceof TextAttachmentView){
-                TextAttachmentView textAttachmentView = (TextAttachmentView) currentFocusChild;
+            if (currentFocusChild instanceof Linkable){
+                Linkable linkable = (Linkable) currentFocusChild;
                 AddAttachmentLinkDialog dialog = new AddAttachmentLinkDialog(this);
                 dialog.setListener((data)->{
-                    textAttachmentView.setLink(data.getText(), data.getUrl());
+                    linkable.setLink(data.getText(), data.getUrl());
                 });
                 dialog.show();
-
             }
         });
     }
