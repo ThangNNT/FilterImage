@@ -6,13 +6,15 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.imagefilter.article.ClassDefine;
+import com.example.imagefilter.article.base.Attachable;
+import com.example.imagefilter.article.base.Focusable;
+import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewUnorderedListBinding;

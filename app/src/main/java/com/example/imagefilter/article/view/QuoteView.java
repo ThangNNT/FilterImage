@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.imagefilter.article.ClassDefine;
+import com.example.imagefilter.article.base.Attachable;
+import com.example.imagefilter.article.base.Focusable;
+import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewQuoteBinding;

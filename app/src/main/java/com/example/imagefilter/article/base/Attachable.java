@@ -1,4 +1,4 @@
-package com.example.imagefilter.article.view;
+package com.example.imagefilter.article.base;
 
 public interface Attachable {
     String getHtml();

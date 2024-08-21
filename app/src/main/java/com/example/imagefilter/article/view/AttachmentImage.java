@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.example.imagefilter.R;
 import com.example.imagefilter.article.ClassDefine;
+import com.example.imagefilter.article.base.Attachable;
+import com.example.imagefilter.article.base.Focusable;
 import com.example.imagefilter.article.base.OnEditClickListener;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
@@ -77,7 +79,6 @@ public class AttachmentImage extends LinearLayout implements Attachable, Focusab
         if (mUrl == null) return null;
         StringBuilder builder = new StringBuilder();
         builder.append("<img class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.IMAGE + "\" src=\"").append(mUrl).append("\">");
-        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtTitle.getTextSize());
         if (mTitlte != null) {
             builder.append("<h1 class=\""+ClassDefine.ATTACHABLE_CLASS+" "+ClassDefine.IMAGE_TITLE +"\"><strong>").append(mTitlte).append("</strong></h1>");
         }

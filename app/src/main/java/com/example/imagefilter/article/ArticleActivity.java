@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import com.example.imagefilter.article.dialog.AddAttachmentImageDialog;
 import com.example.imagefilter.article.dialog.AddAttachmentLinkDialog;
-import com.example.imagefilter.article.view.Attachable;
+import com.example.imagefilter.article.base.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
-import com.example.imagefilter.article.view.Focusable;
+import com.example.imagefilter.article.base.Focusable;
 import com.example.imagefilter.article.view.HeaderView;
-import com.example.imagefilter.article.view.Linkable;
+import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.view.QuoteView;
 import com.example.imagefilter.article.view.TextAttachmentView;
 import com.example.imagefilter.article.view.UnorderedListView;

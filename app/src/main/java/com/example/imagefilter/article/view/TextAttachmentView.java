@@ -1,9 +1,6 @@
 package com.example.imagefilter.article.view;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.Spanned;
-import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.imagefilter.article.ClassDefine;
+import com.example.imagefilter.article.base.Attachable;
+import com.example.imagefilter.article.base.Focusable;
+import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewTextBinding;

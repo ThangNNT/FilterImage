@@ -6,12 +6,10 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,9 +18,9 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.example.imagefilter.R;
 import com.example.imagefilter.article.utils.Utils;
-import com.example.imagefilter.article.view.Attachable;
-import com.example.imagefilter.article.view.Focusable;
-import com.example.imagefilter.article.view.Linkable;
+import com.example.imagefilter.article.base.Attachable;
+import com.example.imagefilter.article.base.Focusable;
+import com.example.imagefilter.article.base.Linkable;
 
 import java.util.ArrayList;
 
