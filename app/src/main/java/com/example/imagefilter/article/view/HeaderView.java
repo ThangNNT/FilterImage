@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewHeaderBinding;
 
@@ -37,8 +38,8 @@ public class HeaderView extends FrameLayout implements Attachable, Focusable {
     @Override
     public String getHtml() {
         String text = mBinding.edtHeader.getText().toString();
-        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtHeader.getTextSize());
-        return "<h3 style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word; margin: 16px 16px 0 16px;\">"+text+"</h3>";
+
+        return "<h3 class=\""+ ClassDefine.ATTACHABLE_CLASS +" "+ClassDefine.HEADER_VIEW+"\">"+text+"</h3>";
     }
 
     @Override

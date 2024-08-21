@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewUnorderedListBinding;
@@ -97,8 +98,7 @@ public class UnorderedListView extends FrameLayout implements Attachable, Focusa
     @Override
     public String getHtml() {
         String content = mBinding.edtContent.getHtml();
-        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
-        return "<li style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">" + content + "</li>\n";
+        return "<li class=\""+ ClassDefine.ATTACHABLE_CLASS +" "+ClassDefine.LIST_ITEM +"\">" + content + "</li>\n";
     }
 
     public void setText(String text){

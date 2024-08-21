@@ -2,14 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="@dimen/margin_horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <com.example.imagefilter.article.SpannableEditText
         android:id="@+id/edt_content"
-        android:inputType="textVisiblePassword|textNoSuggestions"
         android:hint="Input your text"
         android:layout_marginTop="16dp"
+        android:textSize="@dimen/text_attachment_size"
         android:background="@color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewCodeBlockBinding;
@@ -47,11 +48,11 @@ public class CodeBlockView extends FrameLayout implements Attachable, Focusable 
             mOnRemoveClickListener.onRemove(this);
         });
     }
+
     @Override
     public String getHtml() {
         String text = mBinding.edtContent.getText().toString();
-        int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
-        return "<p style=\"background-color:rgba(221, 221, 221, 1); padding: 16px 8px 16px 8px; font-size: "+textSize+"px; margin: 16px 16px 0 16px; white-space: normal; word-wrap: break-word;\"><code>"+text+"</code></p>";
+        return "<p class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.CODE_BLOCK_VIEW + "\"><code>" + text + "</code></p>";
     }
 
     @Override

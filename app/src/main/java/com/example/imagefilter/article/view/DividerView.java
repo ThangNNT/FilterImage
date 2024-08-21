@@ -2,13 +2,13 @@ package com.example.imagefilter.article.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.databinding.ViewDividerBinding;
 
@@ -57,7 +57,7 @@ public class DividerView extends FrameLayout implements Attachable, Focusable {
 
     @Override
     public String getHtml() {
-        return "<div class=\"simple-divider\"><span>•••</span></div>";
+        return "<div class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.DIVIDER + "\"><span>•••</span></div>";
     }
 
     @Override

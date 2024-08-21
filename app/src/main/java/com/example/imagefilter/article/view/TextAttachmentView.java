@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewTextBinding;
@@ -51,7 +52,7 @@ public class TextAttachmentView extends FrameLayout implements Attachable, Focus
 
     @Override
     public String getHtml() {
-        return "<div style = \" margin: 16px 16px 0 16px;  white-space: normal; word-wrap: break-word;  \">" + mBinding.edtContent.getHtml() + "</div>";
+        return "<div class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.TEXT_ATTACHMENT + "\">" + mBinding.edtContent.getHtml() + "</div>";
     }
 
     @Override

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#DDDDDD"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="@dimen/margin_horizontal"
     android:layout_marginTop="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,7 +11,7 @@
         android:id="@+id/edt_content"
         android:paddingVertical="16dp"
         android:layout_marginHorizontal="24dp"
-        android:textSize="14sp"
+        android:textSize="@dimen/code_block_text_size"
         android:background="@color/transparent"
         android:paddingHorizontal="8dp"
         android:layout_width="match_parent"
