@@ -4,11 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.imagefilter.article.dialog.AddAttachmentImageDialog;
-import com.example.imagefilter.article.utils.Utils;
+import com.example.imagefilter.article.dialog.AddAttachmentLinkDialog;
 import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
@@ -22,6 +23,7 @@ import com.example.imagefilter.databinding.ActivityArticleBinding;
 public class ArticleActivity extends AppCompatActivity {
 
     private ActivityArticleBinding binding;
+    private TextAttachmentView current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,15 @@ public class ArticleActivity extends AppCompatActivity {
         });
         binding.layoutAttachment.tvText.setOnClickListener(v -> {
             TextAttachmentView editText = new TextAttachmentView(this);
+            editText.setListener(((view, hasFocus) -> {;
+                if (hasFocus){
+                    current = (TextAttachmentView) view;
+                    binding.layoutAttachment.ivLink.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.layoutAttachment.ivLink.setVisibility(View.GONE);
+                }
+            }));
             binding.layoutArticle.addView(editText);
             editText.focus();
         });
@@ -63,6 +74,14 @@ public class ArticleActivity extends AppCompatActivity {
         });
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
             addUnorderedListView(null, -1);
+        });
+
+        binding.layoutAttachment.ivLink.setOnClickListener((v)-> {
+            AddAttachmentLinkDialog dialog = new AddAttachmentLinkDialog(this);
+            dialog.setListener((data)->{
+                current.setLink(data.getText(), data.getUrl());
+            });
+            dialog.show();
         });
     }
 

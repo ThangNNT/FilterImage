@@ -6,6 +6,8 @@
     android:layout_height="wrap_content">
     <com.example.imagefilter.article.SpannableEditText
         android:id="@+id/edt_content"
+        android:inputType="textVisiblePassword|textNoSuggestions"
+        android:hint="Input your text"
         android:background="@color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
