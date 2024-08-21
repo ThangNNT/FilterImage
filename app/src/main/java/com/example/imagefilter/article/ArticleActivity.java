@@ -167,6 +167,7 @@ public class ArticleActivity extends AppCompatActivity {
         });
         unorderedListView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) currentFocusChild = v;
+            binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         });
         if (index != -1) {
             binding.layoutArticle.addView(unorderedListView, index);

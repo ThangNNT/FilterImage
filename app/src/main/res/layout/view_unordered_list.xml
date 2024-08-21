@@ -17,7 +17,7 @@
             android:layout_marginTop="8dp"
             android:layout_width="4dp"
             android:layout_height="4dp"/>
-        <EditText
+        <com.example.imagefilter.article.SpannableEditText
             android:id="@+id/edt_content"
             android:hint="Typing..."
             android:layout_marginHorizontal="8dp"

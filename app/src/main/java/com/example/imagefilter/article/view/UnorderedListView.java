@@ -16,7 +16,7 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewUnorderedListBinding;
 
-public class UnorderedListView extends FrameLayout implements Attachable, Focusable {
+public class UnorderedListView extends FrameLayout implements Attachable, Focusable, Linkable {
     private ViewUnorderedListBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
     private OnAddUnorderedListViewListener mOnAddUnorderedListViewListener;
@@ -96,7 +96,7 @@ public class UnorderedListView extends FrameLayout implements Attachable, Focusa
 
     @Override
     public String getHtml() {
-        String content = mBinding.edtContent.getText().toString();
+        String content = mBinding.edtContent.getHtml();
         int textSize = (int)  Utils.pxToSp(this.getContext(), mBinding.edtContent.getTextSize());
         return "<li style=\"font-size:" + textSize + "px; white-space: normal; word-wrap: break-word;\">" + content + "</li>\n";
     }
@@ -115,8 +115,9 @@ public class UnorderedListView extends FrameLayout implements Attachable, Focusa
         this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 
-    public EditText getEditText(){
-        return mBinding.edtContent;
+    @Override
+    public void setLink(String text, String url) {
+        mBinding.edtContent.setLink(text, url);
     }
 
     public interface OnAddUnorderedListViewListener {
