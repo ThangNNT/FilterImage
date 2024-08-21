@@ -13,9 +13,10 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewQuoteBinding;
 
-public class QuoteView extends FrameLayout implements Attachable {
+public class QuoteView extends FrameLayout implements Attachable, Focusable {
     private ViewQuoteBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
+    private OnFocusChangeListener mOnFocusChangeListener;
     public QuoteView(@NonNull Context context) {
         super(context);
         init();
@@ -40,9 +41,10 @@ public class QuoteView extends FrameLayout implements Attachable {
             mOnRemoveClickListener.onRemove(this);
         });
         mBinding.edtContent.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                mBinding.ivDelete.setVisibility(View.VISIBLE);
-            } else mBinding.ivDelete.setVisibility(View.GONE);
+            mBinding.ivDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+            if (mOnFocusChangeListener != null){
+                mOnFocusChangeListener.onFocusChange(this, hasFocus);
+            }
         });
     }
 
@@ -61,5 +63,9 @@ public class QuoteView extends FrameLayout implements Attachable {
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
         this.mOnRemoveClickListener = listener;
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 }

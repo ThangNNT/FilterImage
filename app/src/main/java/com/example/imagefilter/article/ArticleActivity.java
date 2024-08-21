@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +13,7 @@ import com.example.imagefilter.article.view.Attachable;
 import com.example.imagefilter.article.view.AttachmentImage;
 import com.example.imagefilter.article.view.CodeBlockView;
 import com.example.imagefilter.article.view.DividerView;
+import com.example.imagefilter.article.view.Focusable;
 import com.example.imagefilter.article.view.HeaderView;
 import com.example.imagefilter.article.view.QuoteView;
 import com.example.imagefilter.article.view.TextAttachmentView;
@@ -23,7 +23,7 @@ import com.example.imagefilter.databinding.ActivityArticleBinding;
 public class ArticleActivity extends AppCompatActivity {
 
     private ActivityArticleBinding binding;
-    private TextAttachmentView current;
+    private View currentFocusChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +40,16 @@ public class ArticleActivity extends AppCompatActivity {
         });
         binding.layoutAttachment.tvText.setOnClickListener(v -> {
             TextAttachmentView editText = new TextAttachmentView(this);
-            editText.setListener(((view, hasFocus) -> {;
+            editText.setOnFocusChangeListener(((view, hasFocus) -> {;
                 if (hasFocus){
-                    current = (TextAttachmentView) view;
+                    currentFocusChild =  view;
                     binding.layoutAttachment.ivLink.setVisibility(View.VISIBLE);
                 }
                 else {
                     binding.layoutAttachment.ivLink.setVisibility(View.GONE);
                 }
             }));
+            editText.setOnRemoveClickListener(this::removeView);
             binding.layoutArticle.addView(editText);
             editText.focus();
         });
@@ -57,18 +58,28 @@ public class ArticleActivity extends AppCompatActivity {
         });
         binding.layoutAttachment.ivCodeBlock.setOnClickListener((v)->{
             CodeBlockView codeBlockView = new CodeBlockView(this);
-            codeBlockView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
+            codeBlockView.setOnRemoveClickListener(this::removeView);
+            codeBlockView.setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) currentFocusChild = view;
+            });
             binding.layoutArticle.addView(codeBlockView);
             codeBlockView.focus();
         });
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
             DividerView dividerView = new DividerView((this));
-            dividerView.setOnRemoveClickListener( view -> binding.layoutArticle.removeView(view));
+            dividerView.setOnRemoveClickListener(this::removeView);
+            dividerView.setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) currentFocusChild = view;
+            });
             binding.layoutArticle.addView(dividerView);
+            dividerView.focus();
         });
         binding.layoutAttachment.ivQuote.setOnClickListener((v) -> {
             QuoteView quoteView = new QuoteView(this);
-            quoteView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
+            quoteView.setOnRemoveClickListener(this::removeView);
+            quoteView.setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) currentFocusChild = view;
+            });
             binding.layoutArticle.addView(quoteView);
             quoteView.focus();
         });
@@ -77,12 +88,29 @@ public class ArticleActivity extends AppCompatActivity {
         });
 
         binding.layoutAttachment.ivLink.setOnClickListener((v)-> {
-            AddAttachmentLinkDialog dialog = new AddAttachmentLinkDialog(this);
-            dialog.setListener((data)->{
-                current.setLink(data.getText(), data.getUrl());
-            });
-            dialog.show();
+            if (currentFocusChild instanceof TextAttachmentView){
+                TextAttachmentView textAttachmentView = (TextAttachmentView) currentFocusChild;
+                AddAttachmentLinkDialog dialog = new AddAttachmentLinkDialog(this);
+                dialog.setListener((data)->{
+                    textAttachmentView.setLink(data.getText(), data.getUrl());
+                });
+                dialog.show();
+
+            }
         });
+    }
+
+    private void removeView(View view){
+        if (currentFocusChild == null) return;
+        ViewGroup parent = binding.layoutArticle;
+        int currentSelectedIndex = parent.indexOfChild(currentFocusChild);
+        if (currentSelectedIndex >=1){
+            View prevView = parent.getChildAt(currentSelectedIndex-1);
+            if (prevView instanceof Focusable){
+                ((Focusable) prevView).focus();
+            }
+        }
+        parent.removeView(view);
     }
 
     private String getHtml() {
@@ -120,7 +148,7 @@ public class ArticleActivity extends AppCompatActivity {
 
     private void addUnorderedListView(@Nullable String initText, int index){
         UnorderedListView unorderedListView = new UnorderedListView(this);
-        unorderedListView.setOnRemoveClickListener(view -> binding.layoutArticle.removeView(view));
+        unorderedListView.setOnRemoveClickListener(this::removeView);
         if (initText!=null){
             unorderedListView.setText(initText);
         }
@@ -129,6 +157,9 @@ public class ArticleActivity extends AppCompatActivity {
             if (indexOfCurrentChild != -1){
                 addUnorderedListView(textAfter, indexOfCurrentChild+1);
             }
+        });
+        unorderedListView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) currentFocusChild = v;
         });
         if (index != -1) {
             binding.layoutArticle.addView(unorderedListView, index);
@@ -141,13 +172,15 @@ public class ArticleActivity extends AppCompatActivity {
         AddAttachmentImageDialog dialog = new AddAttachmentImageDialog(this);
         dialog.setListener((data)->{
             AttachmentImage attachmentImage = new AttachmentImage((this));
-            attachmentImage.setOnRemoveClickListener((v) -> {
-                ViewGroup parent = (ViewGroup) v.getParent();
-                parent.removeView(v);
-            });
+            attachmentImage.setOnRemoveClickListener(this::removeView);
             attachmentImage.setOnEditClickListener((v) -> {
                 if (v instanceof AttachmentImage) {
                     showEditAttachmentImageDialog((AttachmentImage) v);
+                }
+            });
+            attachmentImage.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus){
+                    currentFocusChild = v;
                 }
             });
             attachmentImage.setImageUrl(data.getUrl());

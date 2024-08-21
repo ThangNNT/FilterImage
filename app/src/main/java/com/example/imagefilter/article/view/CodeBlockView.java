@@ -13,10 +13,12 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewCodeBlockBinding;
 
-public class CodeBlockView extends FrameLayout implements Attachable {
+public class CodeBlockView extends FrameLayout implements Attachable, Focusable {
 
     private ViewCodeBlockBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
+    private OnFocusChangeListener mOnFocusChangeListener;
+
     public CodeBlockView(@NonNull Context context) {
         super(context);
         init();
@@ -36,9 +38,9 @@ public class CodeBlockView extends FrameLayout implements Attachable {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         mBinding = ViewCodeBlockBinding.inflate(layoutInflater, this, true);
         mBinding.edtContent.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                mBinding.ivDelete.setVisibility(View.VISIBLE);
-            } else mBinding.ivDelete.setVisibility(View.GONE);
+            mBinding.ivDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+            if (mOnFocusChangeListener == null) return;
+            mOnFocusChangeListener.onFocusChange(this, hasFocus);
         });
         mBinding.ivDelete.setOnClickListener((v)->{
             if (mOnRemoveClickListener == null) return;
@@ -61,5 +63,9 @@ public class CodeBlockView extends FrameLayout implements Attachable {
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
         this.mOnRemoveClickListener = listener;
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 }

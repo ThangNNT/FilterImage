@@ -2,6 +2,7 @@ package com.example.imagefilter.article.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
@@ -11,8 +12,9 @@ import androidx.annotation.Nullable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.databinding.ViewDividerBinding;
 
-public class DividerView extends FrameLayout implements Attachable {
-    private boolean mDisplayDelete = false;
+public class DividerView extends FrameLayout implements Attachable, Focusable {
+    private ViewDividerBinding mBinding;
+    private OnFocusChangeListener mOnFocusChangeListener;
 
     private OnRemoveClickListener mOnRemoveClickListener;
 
@@ -33,16 +35,18 @@ public class DividerView extends FrameLayout implements Attachable {
 
     private void init(){
         LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
-        ViewDividerBinding mBinding = ViewDividerBinding.inflate(layoutInflater, this, true);
-        // hide delete button when init
-        mBinding.ivDelete.setVisibility(mDisplayDelete ? VISIBLE : GONE);
+        mBinding = ViewDividerBinding.inflate(layoutInflater, this, true);
         mBinding.getRoot().setOnClickListener((v) -> {
-            mDisplayDelete = !mDisplayDelete;
-            mBinding.ivDelete.setVisibility(mDisplayDelete ? VISIBLE : GONE);
+            focus();
         });
         mBinding.ivDelete.setOnClickListener((v) -> {
             if (mOnRemoveClickListener == null) return;
             mOnRemoveClickListener.onRemove(this);
+        });
+        mBinding.getRoot().setOnFocusChangeListener((v, hasFocus) ->{
+            mBinding.ivDelete.setVisibility(hasFocus ? VISIBLE : GONE);
+            if (mOnFocusChangeListener == null) return;
+            mOnFocusChangeListener.onFocusChange(this, hasFocus);
         });
     }
 
@@ -58,6 +62,10 @@ public class DividerView extends FrameLayout implements Attachable {
 
     @Override
     public void focus() {
+        mBinding.getRoot().requestFocus();
+    }
 
+    public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 }

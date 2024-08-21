@@ -19,11 +19,12 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.example.imagefilter.R;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.article.view.Attachable;
+import com.example.imagefilter.article.view.Focusable;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SpannableEditText extends AppCompatEditText implements Attachable {
+public class SpannableEditText extends AppCompatEditText implements Attachable, Focusable {
 
     public SpannableEditText(Context context) {
         super(context);

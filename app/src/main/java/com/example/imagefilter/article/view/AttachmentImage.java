@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -17,13 +18,16 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewAttachmentImageBinding;
 
-public class AttachmentImage extends LinearLayout implements Attachable {
+public class AttachmentImage extends LinearLayout implements Attachable, Focusable {
     private ViewAttachmentImageBinding mBinding;
     private String mUrl;
     private String mTitlte;
-    private boolean showDeleteButton = false;
     private OnRemoveClickListener mOnRemoveClickListener;
     private OnEditClickListener mOnEditClickListener;
+    private boolean isImageFocus = false;
+    private boolean isTitleFocus = false;
+    private OnFocusChangeListener mOnFocusChangeListener;
+
     public AttachmentImage(@NonNull Context context) {
         super(context);
         init();
@@ -44,8 +48,16 @@ public class AttachmentImage extends LinearLayout implements Attachable {
         mBinding = ViewAttachmentImageBinding.inflate(layoutInflater, this, true);
         handleEditText();
         handleImageClick();
-        handleModifiersLayoutVisibility();
         handleUpdateClick();
+        mBinding.ivImage.setOnFocusChangeListener((v, hasFocus) -> {
+            isImageFocus = hasFocus;
+            onFocusChanged();
+
+        });
+        mBinding.edtTitle.setOnFocusChangeListener((v, hasFocus) -> {
+            isTitleFocus = hasFocus;
+            onFocusChanged();
+        });
     }
 
     public void setImageUrl(String url){
@@ -75,8 +87,6 @@ public class AttachmentImage extends LinearLayout implements Attachable {
     public void focus() {
         mBinding.edtTitle.requestFocus();
         Utils.showKeyboard(getContext(), mBinding.edtTitle);
-        showDeleteButton = true;
-        handleModifiersLayoutVisibility();
     }
 
     private void handleEditText(){
@@ -97,15 +107,9 @@ public class AttachmentImage extends LinearLayout implements Attachable {
     }
 
     private void handleImageClick(){
-        mBinding.ivImage.setOnClickListener(v -> {
-            showDeleteButton = !showDeleteButton;
-            handleModifiersLayoutVisibility();
-        });
+        mBinding.ivImage.setOnClickListener(View::requestFocus);
     }
 
-    private void handleModifiersLayoutVisibility(){
-        mBinding.layoutModifiers.setVisibility(showDeleteButton? VISIBLE: INVISIBLE);
-    }
 
     private void handleUpdateClick(){
         mBinding.ivDelete.setOnClickListener((v)->{
@@ -118,11 +122,23 @@ public class AttachmentImage extends LinearLayout implements Attachable {
         });
     }
 
+    private void onFocusChanged(){
+        boolean hasFocus = false;
+        if (isTitleFocus || isImageFocus) hasFocus = true;
+        mBinding.layoutModifiers.setVisibility(hasFocus? VISIBLE: INVISIBLE);
+        if (mOnFocusChangeListener == null) return;
+        mOnFocusChangeListener.onFocusChange(this, hasFocus);
+    }
+
     public void setOnRemoveClickListener(OnRemoveClickListener mOnRemoveClickListener) {
         this.mOnRemoveClickListener = mOnRemoveClickListener;
     }
 
     public void setOnEditClickListener(OnEditClickListener mOnEditClickListener) {
         this.mOnEditClickListener = mOnEditClickListener;
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 }

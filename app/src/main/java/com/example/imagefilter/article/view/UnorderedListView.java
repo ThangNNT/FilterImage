@@ -16,10 +16,13 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewUnorderedListBinding;
 
-public class UnorderedListView extends FrameLayout implements Attachable {
+public class UnorderedListView extends FrameLayout implements Attachable, Focusable {
     private ViewUnorderedListBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
     private OnAddUnorderedListViewListener mOnAddUnorderedListViewListener;
+
+    private OnFocusChangeListener mOnFocusChangeListener;
+
     public UnorderedListView(@NonNull Context context) {
         super(context);
         init();
@@ -47,6 +50,9 @@ public class UnorderedListView extends FrameLayout implements Attachable {
             if (hasFocus) {
                 mBinding.ivDelete.setVisibility(View.VISIBLE);
             } else mBinding.ivDelete.setVisibility(View.GONE);
+            if (mOnFocusChangeListener != null){
+                mOnFocusChangeListener.onFocusChange(this, hasFocus);
+            }
         });
         mBinding.edtContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,6 +69,7 @@ public class UnorderedListView extends FrameLayout implements Attachable {
             public void afterTextChanged(Editable s) {
                 int breakLineIndex = s.toString().indexOf("\n");
                 if (breakLineIndex != -1) {
+                    // auto add new UnorderedList View if user enter break line button
                     CharSequence text = s.toString().subSequence(0, breakLineIndex);
                     CharSequence textAfter = null;
                     if (breakLineIndex < s.length() - 2) {
@@ -102,6 +109,10 @@ public class UnorderedListView extends FrameLayout implements Attachable {
     public void focus(){
         mBinding.edtContent.requestFocus();
         Utils.showKeyboard(getContext(), mBinding.edtContent);
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 
     public EditText getEditText(){

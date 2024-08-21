@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewHeaderBinding;
 
-public class HeaderView extends FrameLayout implements Attachable {
+public class HeaderView extends FrameLayout implements Attachable, Focusable {
     private ViewHeaderBinding mBinding;
 
     public HeaderView(@NonNull Context context) {

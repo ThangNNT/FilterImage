@@ -12,12 +12,15 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewTextBinding;
 
-public class TextAttachmentView extends FrameLayout implements Attachable {
+public class TextAttachmentView extends FrameLayout implements Attachable, Focusable {
     private ViewTextBinding mBinding;
-    private OnFocusChangeListener listener;
+    private View.OnFocusChangeListener mOnFocusChangeListener;
+    private OnRemoveClickListener mOnRemoveClickListener;
+
     public TextAttachmentView(@NonNull Context context) {
         super(context);
         init();
@@ -36,8 +39,13 @@ public class TextAttachmentView extends FrameLayout implements Attachable {
     private void init(){
         mBinding = ViewTextBinding.inflate(LayoutInflater.from(getContext()), this, true);
         mBinding.edtContent.setOnFocusChangeListener((v, hasFocus)->{
-            if (listener == null) return;
-            listener.onFocusChange(this, hasFocus);
+            mBinding.ivDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+            if (mOnFocusChangeListener == null) return;
+            mOnFocusChangeListener.onFocusChange(this, hasFocus);
+        });
+        mBinding.ivDelete.setOnClickListener(v -> {
+            if (mOnRemoveClickListener == null) return;
+            mOnRemoveClickListener.onRemove(this);
         });
     }
 
@@ -61,11 +69,12 @@ public class TextAttachmentView extends FrameLayout implements Attachable {
         editable.setSpan(new URLSpan(url), selectedStart, selectedStart + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    public void setListener(OnFocusChangeListener listener) {
-        this.listener = listener;
+
+    public void setOnFocusChangeListener(View.OnFocusChangeListener mOnFocusChangeListener) {
+        this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 
-    public interface OnFocusChangeListener {
-        void onFocusChange(View view, boolean hasFocus);
+    public void setOnRemoveClickListener(OnRemoveClickListener mOnRemoveClickListener) {
+        this.mOnRemoveClickListener = mOnRemoveClickListener;
     }
 }
