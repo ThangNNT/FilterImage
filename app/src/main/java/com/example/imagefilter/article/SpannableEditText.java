@@ -25,7 +25,6 @@ import com.example.imagefilter.article.view.Focusable;
 import com.example.imagefilter.article.view.Linkable;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class SpannableEditText extends AppCompatEditText implements Attachable, Focusable, Linkable {
 
@@ -48,9 +47,19 @@ public class SpannableEditText extends AppCompatEditText implements Attachable, 
         setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.editext_custom_menu, menu);
+                ArrayList<MenuItem> defaultItems = new ArrayList<>();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem item = menu.getItem(i);
+                    defaultItems.add(item);
+                }
+                menu.clear();
+                menu.add(0, R.id.action_bold, 0, "B");
+                menu.add(0, R.id.action_italic, 0, "I");
+                menu.add(0, R.id.action_underline, 0, "U");
+                for (MenuItem item: defaultItems){
+                    menu.add(item.getGroupId(), item.getItemId(), 1, item.getTitle());
+                }
                 return true;
-
             }
 
             @Override
