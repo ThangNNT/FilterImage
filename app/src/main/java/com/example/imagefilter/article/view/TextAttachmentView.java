@@ -1,6 +1,7 @@
 package com.example.imagefilter.article.view;
 
 import android.content.Context;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,10 @@ public class TextAttachmentView extends FrameLayout implements Attachable, Focus
     @Override
     public String getHtml() {
         return "<div class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.TEXT_ATTACHMENT + "\">" + mBinding.edtContent.getHtml() + "</div>";
+    }
+
+    public void setSpanned(Spanned spanned){
+        mBinding.edtContent.setText(spanned);
     }
 
     @Override

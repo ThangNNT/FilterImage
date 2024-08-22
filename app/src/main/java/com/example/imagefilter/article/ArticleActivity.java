@@ -4,6 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,7 +24,14 @@ import com.example.imagefilter.article.view.TextAttachmentView;
 import com.example.imagefilter.article.view.UnorderedListView;
 import com.example.imagefilter.databinding.ActivityArticleBinding;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class ArticleActivity extends AppCompatActivity {
+
+    static final String HTML = "HTML";
 
     private ActivityArticleBinding binding;
     private View currentFocusChild;
@@ -32,6 +42,7 @@ public class ArticleActivity extends AppCompatActivity {
         binding = ActivityArticleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setUp();
+        initData();
     }
 
     private void setUp() {
@@ -41,18 +52,7 @@ public class ArticleActivity extends AppCompatActivity {
         });
         // Text
         binding.layoutAttachment.tvText.setOnClickListener(v -> {
-            TextAttachmentView editText = new TextAttachmentView(this);
-            editText.setOnFocusChangeListener(((view, hasFocus) -> {;
-                if (hasFocus){
-                    currentFocusChild =  view;
-                    binding.layoutAttachment.ivLink.setVisibility(View.VISIBLE);
-                }
-                else {
-                    binding.layoutAttachment.ivLink.setVisibility(View.GONE);
-                }
-            }));
-            editText.setOnRemoveClickListener(this::removeView);
-            addView(editText);
+            addView(createTextAttachmentView());
         });
         // image
         binding.layoutAttachment.ivImage.setOnClickListener((v) -> {
@@ -60,31 +60,15 @@ public class ArticleActivity extends AppCompatActivity {
         });
         // code block
         binding.layoutAttachment.ivCodeBlock.setOnClickListener((v)->{
-            CodeBlockView codeBlockView = new CodeBlockView(this);
-            codeBlockView.setOnRemoveClickListener(this::removeView);
-            codeBlockView.setOnFocusChangeListener((view, hasFocus) -> {
-                if (hasFocus) currentFocusChild = view;
-            });
-            addView(codeBlockView);
+            addView(createCodeBlockView());
         });
         // divider
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
-            DividerView dividerView = new DividerView((this));
-            dividerView.setOnRemoveClickListener(this::removeView);
-            dividerView.setOnFocusChangeListener((view, hasFocus) -> {
-                if (hasFocus) currentFocusChild = view;
-            });
-            addView(dividerView);
+            addView(createDividerView());
         });
         // quote
         binding.layoutAttachment.ivQuote.setOnClickListener((v) -> {
-            QuoteView quoteView = new QuoteView(this);
-            quoteView.setOnRemoveClickListener(this::removeView);
-            quoteView.setOnFocusChangeListener((view, hasFocus) -> {
-                if (hasFocus) currentFocusChild = view;
-                binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-            });
-            addView(quoteView);
+            addView(createQuoteView());
         });
         // ul list
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
@@ -200,20 +184,7 @@ public class ArticleActivity extends AppCompatActivity {
     private void showAddAttachmentImageDialog(){
         AddAttachmentImageDialog dialog = new AddAttachmentImageDialog(this);
         dialog.setListener((data)->{
-            AttachmentImage attachmentImage = new AttachmentImage((this));
-            attachmentImage.setOnRemoveClickListener(this::removeView);
-            attachmentImage.setOnEditClickListener((v) -> {
-                if (v instanceof AttachmentImage) {
-                    showEditAttachmentImageDialog((AttachmentImage) v);
-                }
-            });
-            attachmentImage.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus){
-                    currentFocusChild = v;
-                }
-            });
-            attachmentImage.setImageUrl(data.getUrl());
-            addView(attachmentImage);
+            addView(createAttachmentImage(data.getUrl()));
         });
         dialog.show();
     }
@@ -222,5 +193,141 @@ public class ArticleActivity extends AppCompatActivity {
         AddAttachmentImageDialog dialog = new AddAttachmentImageDialog(this);
         dialog.setListener((data)-> attachmentImage.setImageUrl(data.getUrl()));
         dialog.show();
+    }
+
+    private void initData(){
+        String html = getIntent().getStringExtra(HTML);
+        if (html == null) return;
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.select("."+ClassDefine.ATTACHABLE_CLASS);
+        for (Element element : elements) {
+            if(element.hasClass(ClassDefine.HEADER_VIEW)){
+                int childCount = binding.layoutArticle.getChildCount();
+                if (childCount>0){
+                    View firstView = binding.layoutArticle.getChildAt(0);
+                    String header = element.text();
+                    if (firstView instanceof HeaderView){
+                        ((HeaderView) firstView).setText(header);
+                    }
+                }
+            } else if ((element.hasClass(ClassDefine.TEXT_ATTACHMENT))){
+                TextAttachmentView textAttachmentView = createTextAttachmentView();
+                String text = element.html();
+                Spanned spanned = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+                textAttachmentView.setSpanned(spanned);
+                Log.d("AAAAAAAAAAAAAAAA", "TEXT_ATTACHMENT:" +text);
+                binding.layoutArticle.addView(textAttachmentView);
+            } else if (element.hasClass(ClassDefine.DIVIDER)) {
+                binding.layoutArticle.addView(createDividerView());
+            }
+            else if (element.hasClass(ClassDefine.CODE_BLOCK_VIEW)){
+                CodeBlockView codeBlockView = createCodeBlockView();
+                String text = element.select("p").text();
+                codeBlockView.setText(text);
+                binding.layoutArticle.addView(codeBlockView);
+            }
+            else if (element.hasClass(ClassDefine.QUOTE_VIEW)){
+                QuoteView quoteView = createQuoteView();
+                String text = element.html();
+                Spanned spanned = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+                quoteView.setSpanned(spanned);
+                binding.layoutArticle.addView(quoteView);
+            } else if (element.hasClass(ClassDefine.LIST_ITEM)){
+                UnorderedListView unorderedListView = createUnorderedListView();
+                String text = element.html();
+                Log.d("AAAAAAAAAAAAAAAA", "ul:" +text);
+                Spanned spanned = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+                unorderedListView.setSpanned(spanned);
+                binding.layoutArticle.addView(unorderedListView);
+            }
+            else if (element.hasClass(ClassDefine.IMAGE)){
+                String url = element.select("img").attr("src");
+                AttachmentImage attachmentImage = createAttachmentImage(url);
+                binding.layoutArticle.addView(attachmentImage);
+            }
+            else if (element.hasClass(ClassDefine.IMAGE_TITLE)){
+                int lastIndex = binding.layoutArticle.getChildCount() - 1;
+                View lastView = binding.layoutArticle.getChildAt(lastIndex);
+                Log.d("AAAAAAAAAAAAAAAA", "ul:" +element.text());
+                if (lastView instanceof AttachmentImage){
+                    ((AttachmentImage) lastView).setTitle(element.text());
+                }
+            }
+        }
+    }
+
+    private TextAttachmentView createTextAttachmentView(){
+        TextAttachmentView editText = new TextAttachmentView(this);
+        editText.setOnFocusChangeListener(((view, hasFocus) -> {;
+            if (hasFocus){
+                currentFocusChild =  view;
+                binding.layoutAttachment.ivLink.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.layoutAttachment.ivLink.setVisibility(View.GONE);
+            }
+        }));
+        editText.setOnRemoveClickListener(this::removeView);
+        return editText;
+    }
+
+    private DividerView createDividerView(){
+        DividerView dividerView = new DividerView((this));
+        dividerView.setOnRemoveClickListener(this::removeView);
+        dividerView.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) currentFocusChild = view;
+        });
+        return dividerView;
+    }
+    private CodeBlockView createCodeBlockView(){
+        CodeBlockView codeBlockView = new CodeBlockView(this);
+        codeBlockView.setOnRemoveClickListener(this::removeView);
+        codeBlockView.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) currentFocusChild = view;
+        });
+        return codeBlockView;
+    }
+
+    private QuoteView createQuoteView() {
+        QuoteView quoteView = new QuoteView(this);
+        quoteView.setOnRemoveClickListener(this::removeView);
+        quoteView.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) currentFocusChild = view;
+            binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+        });
+        return quoteView;
+    }
+
+    private UnorderedListView createUnorderedListView(){
+        UnorderedListView unorderedListView = new UnorderedListView(this);
+        unorderedListView.setOnRemoveClickListener(this::removeView);
+        unorderedListView.setOnAddUnorderedListViewListener((view, textAfter) -> {
+            int indexOfCurrentChild = binding.layoutArticle.indexOfChild(view);
+            if (indexOfCurrentChild != -1){
+                addUnorderedListView(textAfter, indexOfCurrentChild+1);
+            }
+        });
+        unorderedListView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) currentFocusChild = v;
+            binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+        });
+        return unorderedListView;
+    }
+
+    private AttachmentImage createAttachmentImage(String url){
+        AttachmentImage attachmentImage = new AttachmentImage((this));
+        attachmentImage.setOnRemoveClickListener(this::removeView);
+        attachmentImage.setOnEditClickListener((v) -> {
+            if (v instanceof AttachmentImage) {
+                showEditAttachmentImageDialog((AttachmentImage) v);
+            }
+        });
+        attachmentImage.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus){
+                currentFocusChild = v;
+            }
+        });
+        attachmentImage.setImageUrl(url);
+        return attachmentImage;
     }
 }

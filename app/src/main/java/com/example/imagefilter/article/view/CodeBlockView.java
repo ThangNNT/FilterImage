@@ -3,6 +3,7 @@ package com.example.imagefilter.article.view;
 import android.content.Context;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,10 @@ public class CodeBlockView extends FrameLayout implements Attachable, Focusable 
         mBinding.edtContent.requestFocus();
         Utils.showKeyboard(getContext(), mBinding.edtContent);
 
+    }
+
+    public void setText(String text){
+        mBinding.edtContent.setText(text);
     }
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {

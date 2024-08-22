@@ -2,6 +2,7 @@ package com.example.imagefilter.article.view;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -105,6 +106,10 @@ public class UnorderedListView extends FrameLayout implements Attachable, Focusa
 
     public void setText(String text){
         mBinding.edtContent.setText(text);
+    }
+
+    public void setSpanned(Spanned spanned){
+        mBinding.edtContent.setText(spanned);
     }
 
     @Override

@@ -50,4 +50,8 @@ public class HeaderView extends FrameLayout implements Attachable, Focusable {
         Utils.showKeyboard(getContext(), mBinding.edtHeader);
 
     }
+
+    public void setText(String text){
+        mBinding.edtHeader.setText(text);
+    }
 }

@@ -14,6 +14,11 @@ import com.example.imagefilter.R;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ActivityPreviewBinding;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class PreviewActivity extends AppCompatActivity {
     private static final String PREVIEW_HTML = "PREVIEW_HTML";
 
@@ -161,6 +166,11 @@ public class PreviewActivity extends AppCompatActivity {
         mBinding.webview.getSettings().setJavaScriptEnabled(true);
         mBinding.webview.getSettings().setAllowFileAccess(true);
         mBinding.webview.loadData(data, "text/html", "UTF-8");
+        mBinding.btnTest.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ArticleActivity.class);
+            intent.putExtra(ArticleActivity.HTML, data);
+            startActivity(intent);
+        });
     }
 
     public static Intent newIntent(Context context, String html){

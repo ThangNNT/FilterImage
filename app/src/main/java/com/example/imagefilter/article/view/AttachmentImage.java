@@ -72,6 +72,7 @@ public class AttachmentImage extends LinearLayout implements Attachable, Focusab
 
     public void  setTitle(@Nullable String title){
         mTitlte = title;
+        mBinding.edtTitle.setText(title);
     }
     @Nullable
     @Override

@@ -1,6 +1,7 @@
 package com.example.imagefilter.article.view;
 
 import android.content.Context;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,10 @@ public class QuoteView extends FrameLayout implements Attachable, Focusable, Lin
     public String getHtml() {
         String quote = mBinding.edtContent.getHtml();
         return "<blockquote class=\""+ ClassDefine.ATTACHABLE_CLASS +" "+ClassDefine.QUOTE_VIEW +"\">" + quote + " </blockquote>";
+    }
+
+    public void setSpanned(Spanned spanned){
+        mBinding.edtContent.setText(spanned);
     }
 
     @Override
