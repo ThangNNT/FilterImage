@@ -52,8 +52,7 @@ public class ArticleActivity extends AppCompatActivity {
                 }
             }));
             editText.setOnRemoveClickListener(this::removeView);
-            binding.layoutArticle.addView(editText);
-            editText.focus();
+            addView(editText);
         });
         // image
         binding.layoutAttachment.ivImage.setOnClickListener((v) -> {
@@ -66,8 +65,7 @@ public class ArticleActivity extends AppCompatActivity {
             codeBlockView.setOnFocusChangeListener((view, hasFocus) -> {
                 if (hasFocus) currentFocusChild = view;
             });
-            binding.layoutArticle.addView(codeBlockView);
-            codeBlockView.focus();
+            addView(codeBlockView);
         });
         // divider
         binding.layoutAttachment.ivDivider.setOnClickListener((v)->{
@@ -76,8 +74,7 @@ public class ArticleActivity extends AppCompatActivity {
             dividerView.setOnFocusChangeListener((view, hasFocus) -> {
                 if (hasFocus) currentFocusChild = view;
             });
-            binding.layoutArticle.addView(dividerView);
-            dividerView.focus();
+            addView(dividerView);
         });
         // quote
         binding.layoutAttachment.ivQuote.setOnClickListener((v) -> {
@@ -87,8 +84,7 @@ public class ArticleActivity extends AppCompatActivity {
                 if (hasFocus) currentFocusChild = view;
                 binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
             });
-            binding.layoutArticle.addView(quoteView);
-            quoteView.focus();
+            addView(quoteView);
         });
         // ul list
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
@@ -107,6 +103,9 @@ public class ArticleActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * remove a view and focus on previous view
+     */
     private void removeView(View view){
         if (currentFocusChild == null) return;
         ViewGroup parent = binding.layoutArticle;
@@ -119,6 +118,28 @@ public class ArticleActivity extends AppCompatActivity {
         }
         parent.removeView(view);
     }
+
+    /**
+     * Add a view after the item that is focused.
+     */
+    private void addView(View view){
+        ViewGroup parent = binding.layoutArticle;
+        if (currentFocusChild == null) {
+            parent.addView(view);
+            if (view instanceof Focusable){
+                ((Focusable) view).focus();
+            }
+            return;
+        };
+        int currentSelectedIndex = parent.indexOfChild(currentFocusChild);
+        if (currentSelectedIndex != -1 && currentSelectedIndex < parent.getChildCount() - 1) {
+            parent.addView(view, currentSelectedIndex + 1);
+        } else parent.addView(view);
+        if (view instanceof Focusable){
+            ((Focusable) view).focus();
+        }
+    }
+
 
     private String getHtml() {
         int childCount = binding.layoutArticle.getChildCount();
@@ -171,9 +192,9 @@ public class ArticleActivity extends AppCompatActivity {
         });
         if (index != -1) {
             binding.layoutArticle.addView(unorderedListView, index);
+            unorderedListView.focus();
         } else
-            binding.layoutArticle.addView(unorderedListView);
-        unorderedListView.focus();
+            addView(unorderedListView);
     }
 
     private void showAddAttachmentImageDialog(){
@@ -192,8 +213,7 @@ public class ArticleActivity extends AppCompatActivity {
                 }
             });
             attachmentImage.setImageUrl(data.getUrl());
-            binding.layoutArticle.addView(attachmentImage);
-            attachmentImage.focus();
+            addView(attachmentImage);
         });
         dialog.show();
     }
