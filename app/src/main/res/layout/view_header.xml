@@ -7,6 +7,7 @@
         android:background="@color/transparent"
         android:hint="Input your header"
         android:layout_marginHorizontal="@dimen/margin_horizontal"
+        android:layout_marginBottom="@dimen/header_view_margin_bottom"
         android:textSize="@dimen/header_text_size"
         android:textStyle="bold"
         android:includeFontPadding="false"

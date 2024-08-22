@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="@dimen/margin_horizontal"
-    android:layout_marginTop="8dp"
     android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/ul_item_margin_top"
+        android:layout_marginHorizontal="@dimen/ul_item_margin_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatImageView
@@ -32,7 +32,6 @@
         app:srcCompat="@drawable/ic_close_24"
         app:tint="@color/black"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
         android:padding="4dp"
         android:layout_gravity="end"
         android:layout_width="24dp"

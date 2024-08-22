@@ -36,82 +36,124 @@ public class PreviewActivity extends AppCompatActivity {
         int textSize = getTextSize(R.dimen.text_attachment_size);
         int listItemTextSize = getTextSize(R.dimen.ul_item_text_size);
         int imageTitleTextSize = getTextSize(R.dimen.image_title_text_size);
-        String data = "<html>" +
-                "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
-                "        <style type='text/css'>\n" +
-                "               img {max-width: 100%;height:initial;} div,p,span,a {max-width: 100%;}\n" +
-                "            html {" +
-                "               font-size: 16px;" +
-                "             }" +
-                "            body {" +
-                "             font-size: 1rem;" +
-                "            }" +
-                "           .simple-divider {" +
-                "               text-align: center;" +
-                "               margin: 20px 0;" +
-                "               }" +
-                "           .simple-divider span {" +
-                "                padding: 0 10px;" +
-                "                font-size: 32px;" +
-                "                color: gray;" +
-                "                letter-spacing: 8px;" +
-                "            }" +
-                "            blockquote {" +
+
+        int dividerMarginTop = getSize(R.dimen.divider_margin_top);
+        int dividerMarginBottom = getSize(R.dimen.divider_margin_bottom);
+
+
+        int textViewMarginTop = getSize(R.dimen.text_view_margin_top);
+        int textViewMarginHorizontal = getSize(R.dimen.text_view_margin_horizontal);
+
+        int headerViewMarginHorizontal = getSize(R.dimen.header_view_margin_horizontal);
+        int headerViewMarginBottom = getSize(R.dimen.header_view_margin_bottom);
+
+        int codeBlockMarginHorizontal = getSize(R.dimen.code_block_margin_horizontal);
+        int codeBlockMarginTop = getSize(R.dimen.code_block_margin_top);
+        int codeBlockPaddingHorizontal = getSize(R.dimen.code_block_padding_horizontal);
+        int codeBlockPaddingVertical = getSize(R.dimen.code_block_padding_vertical);
+
+        int quoteMarginTop = getSize(R.dimen.quote_margin_top);
+        int quoteMarginHorizontal = getSize(R.dimen.quote_margin_horizontal);
+
+        int imageMarginTop = getSize(R.dimen.image_margin_top);
+        int imageTitleMarginTop = getSize(R.dimen.image_title_margin_top);
+        int imageTitleMarginHorizontal = getSize(R.dimen.image_title_margin_horizontal);
+
+        int ulItemMarginTop = getSize(R.dimen.ul_item_margin_top);
+        int ulItemMarginHorizontal = getSize(R.dimen.ul_item_margin_horizontal);
+
+        String data = "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                "    <style type=\"text/css\">" +
+                "        img {" +
+                "            max-width: 100%;" +
+                "            height: initial;" +
+                "        }" +
+                "        div, p, span, a {" +
+                "            max-width: 100%;" +
+                "        }" +
+                "        html {" +
+                "            font-size: 16px;" +
+                "        }" +
+                "        body {" +
+                "            font-size: 1rem;" +
+                "        }" +
+                "        .simple-divider {" +
+                "            text-align: center;" +
+                "            margin: " + dividerMarginTop + "px 0px "+dividerMarginBottom+"px  0px;" +
+                "        }" +
+                "        .simple-divider span {" +
+                "            padding: 0 10px;" +
+                "            font-size: 32px;" +
+                "            color: gray;" +
+                "            letter-spacing: 8px;" +
+                "        }" +
+                "        blockquote {" +
                 "            font-style: italic;" +
                 "            padding-left: 32px;" +
                 "            margin: 20px 16px;" +
                 "            position: relative;" +
-                "             }" +
-                "           ul {" +
-                "                 margin-top: 10px;" +
-                "           }" +
-                "           ul li {" +
-                "                 margin-bottom: 10px;" +
-                "           }" +
-                "           ul li:last-child {" +
-                "                margin-bottom: 0;" +
-                "            }" +
-                "            blockquote::before {" +
+                "        }" +
+                "        blockquote::before {" +
                 "            content: \"\\0022\";" +
                 "            font-size: 3rem;" +
                 "            color: rgba(153, 153, 153, 1);" +
                 "            position: absolute;" +
                 "            left: 10px;" +
                 "            top: -10px;" +
-                "                }" +
-                "                         .code-block {" +
-                "      background-color:rgba(221, 221, 221, 1);" +
-                "            padding: 16px 8px 16px 8px;" +
-                "            font-size:  "+codeBlockTextSize+"px;" +
-                "            margin: 16px 16px 0 16px;" +
-                "        }                                             " +
-                "      .header-view {" +
-                "        font-size: "+headerTextSize+"px;" +
-                "            margin: 16px 16px 0 16px;" +
-                "        }"+
-                " .quote-view {" +
-                "        font-size: "+quoteTextSize+"px;" +
-                "        }"+
-                " .text-view {\n" +
-                "        margin: 16px 16px 0 16px;" +
-                "            font-size: "+textSize+"px;" +
-                "        }"+
-                " .list-item-view{" +
-                "        font-size: "+listItemTextSize+"px;" +
-                "        }"+
-                ".image-view {" +
-                "        max-width: 100%; " +
+
+                "        }" +
+                "        .code-block {" +
+                "            background-color:rgba(221, 221, 221, 1);" +
+                "            padding: "+codeBlockPaddingVertical+"px "+codeBlockPaddingHorizontal+"px;" +
+                "            font-size:  " + codeBlockTextSize + "px;" +
+                "            margin: " + codeBlockMarginTop + "px " + codeBlockMarginHorizontal + "px 0 " + codeBlockMarginHorizontal + "px;" +
+                "        }" +
+                "        .header-view {" +
+                "           font-size: "+headerTextSize+"px;" +
+                "            margin: 0px " + headerViewMarginHorizontal + "px " + headerViewMarginBottom + "px " + headerViewMarginHorizontal + "px;" +
+                "        }" +
+                "        .quote-view {" +
+                "            font-size: "+quoteTextSize+"px;" +
+                "            font-style: italic;" +
+                "            padding-left: 32px;" +
+                "            margin: " + quoteMarginTop + "px " + quoteMarginHorizontal + "px 0 " + quoteMarginHorizontal + "px;" +
+                "            position: relative;" +
+                "        }" +
+                "        .quote-view::before {" +
+                "            content: \"\\0022\";" +
+                "            font-size: 3rem;" +
+                "            color: rgba(153, 153, 153, 1);" +
+                "            position: absolute;" +
+                "            left: 10px;" +
+                "            top: -10px;" +
+                "        }" +
+                "        .text-view {" +
+                "            margin: " + textViewMarginTop + "px " + textViewMarginHorizontal + "px 0 " + textViewMarginHorizontal + "px;" +
+                "            font-size: " + textSize + "px;" +
+                "        }" +
+                "        .list-item-view{" +
+                "           font-size: "+listItemTextSize+"px;" +
+                "            margin: " + ulItemMarginTop + "px " + ulItemMarginHorizontal + "px 0 " + ulItemMarginHorizontal + "px;" +
+                "        }" +
+                "        .image-view {" +
+                "            margin: " + imageMarginTop + "px 0 0 0;" +
+                "           max-width: 100%;" +
                 "            height: auto;" +
-                "        }"+
-                " .image-title {" +
-                "        text-align:center;" +
+                "        }" +
+                "        .image-title {" +
+                "            margin: " + imageTitleMarginTop + "px " + imageTitleMarginHorizontal + "px 0 " + imageTitleMarginHorizontal + "px;" +
+                "            text-align:center;" +
                 "            font-size: "+imageTitleTextSize+"px;" +
-                "        }"+
-                "       </style>" +
-                "       <body style=\"margin: 0; padding: 0; white-space: normal; word-wrap: break-word\">"
-                + html +
-                "       </body>" +
-                "     </html>";
+                "        }" +
+                "    </style>" +
+                "</head>" +
+                "<body style=\"margin: 16px 0; padding: 0; white-space: normal; word-wrap: break-word\">" +
+                         html +
+                "</body>" +
+                "</html>";
         mBinding.webview.setInitialScale(1);
         mBinding.webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mBinding.webview.getSettings().setUseWideViewPort(true);
@@ -129,5 +171,9 @@ public class PreviewActivity extends AppCompatActivity {
 
     private int getTextSize(@DimenRes int dimenRes){
         return (int) Utils.pxToSp(this, getResources().getDimensionPixelSize(dimenRes));
+    }
+
+    private int getSize(@DimenRes int dimenRes){
+        return (int) Utils.pxToDp(this, getResources().getDimensionPixelSize(dimenRes));
     }
 }

@@ -3,26 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#DDDDDD"
-    android:layout_marginHorizontal="@dimen/margin_horizontal"
-    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="@dimen/code_block_margin_horizontal"
+    android:layout_marginTop="@dimen/code_block_margin_top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <EditText
         android:id="@+id/edt_content"
-        android:paddingVertical="16dp"
-        android:layout_marginHorizontal="24dp"
+        android:paddingVertical="@dimen/code_block_padding_vertical"
+        android:layout_marginHorizontal="@dimen/code_block_padding_horizontal"
         android:textSize="@dimen/code_block_text_size"
         android:background="@color/transparent"
         android:paddingHorizontal="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Add yor code" />
+        android:hint="Add your code" />
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_delete"
         app:srcCompat="@drawable/ic_close_24"
         app:tint="@color/black"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
         android:padding="4dp"
         android:layout_gravity="end"
         android:layout_width="20dp"
