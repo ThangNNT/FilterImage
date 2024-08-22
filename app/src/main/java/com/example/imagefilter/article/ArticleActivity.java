@@ -1,12 +1,10 @@
 package com.example.imagefilter.article;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -72,7 +70,7 @@ public class ArticleActivity extends AppCompatActivity {
         });
         // ul list
         binding.layoutAttachment.ivList.setOnClickListener((v) -> {
-            addUnorderedListView(null, -1);
+            addView(createUnorderedListView());
         });
         // link
         binding.layoutAttachment.ivLink.setOnClickListener((v)-> {
@@ -158,29 +156,6 @@ public class ArticleActivity extends AppCompatActivity {
         return htmlResult.toString();
     }
 
-    private void addUnorderedListView(@Nullable String initText, int index){
-        UnorderedListView unorderedListView = new UnorderedListView(this);
-        unorderedListView.setOnRemoveClickListener(this::removeView);
-        if (initText!=null){
-            unorderedListView.setText(initText);
-        }
-        unorderedListView.setOnAddUnorderedListViewListener((view, textAfter) -> {
-            int indexOfCurrentChild = binding.layoutArticle.indexOfChild(view);
-            if (indexOfCurrentChild != -1){
-                addUnorderedListView(textAfter, indexOfCurrentChild+1);
-            }
-        });
-        unorderedListView.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) currentFocusChild = v;
-            binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-        });
-        if (index != -1) {
-            binding.layoutArticle.addView(unorderedListView, index);
-            unorderedListView.focus();
-        } else
-            addView(unorderedListView);
-    }
-
     private void showAddAttachmentImageDialog(){
         AddAttachmentImageDialog dialog = new AddAttachmentImageDialog(this);
         dialog.setListener((data)->{
@@ -215,7 +190,6 @@ public class ArticleActivity extends AppCompatActivity {
                 String text = element.html();
                 Spanned spanned = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
                 textAttachmentView.setSpanned(spanned);
-                Log.d("AAAAAAAAAAAAAAAA", "TEXT_ATTACHMENT:" +text);
                 binding.layoutArticle.addView(textAttachmentView);
             } else if (element.hasClass(ClassDefine.DIVIDER)) {
                 binding.layoutArticle.addView(createDividerView());
@@ -235,7 +209,6 @@ public class ArticleActivity extends AppCompatActivity {
             } else if (element.hasClass(ClassDefine.LIST_ITEM)){
                 UnorderedListView unorderedListView = createUnorderedListView();
                 String text = element.html();
-                Log.d("AAAAAAAAAAAAAAAA", "ul:" +text);
                 Spanned spanned = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
                 unorderedListView.setSpanned(spanned);
                 binding.layoutArticle.addView(unorderedListView);
@@ -248,7 +221,6 @@ public class ArticleActivity extends AppCompatActivity {
             else if (element.hasClass(ClassDefine.IMAGE_TITLE)){
                 int lastIndex = binding.layoutArticle.getChildCount() - 1;
                 View lastView = binding.layoutArticle.getChildAt(lastIndex);
-                Log.d("AAAAAAAAAAAAAAAA", "ul:" +element.text());
                 if (lastView instanceof AttachmentImage){
                     ((AttachmentImage) lastView).setTitle(element.text());
                 }
@@ -301,12 +273,6 @@ public class ArticleActivity extends AppCompatActivity {
     private UnorderedListView createUnorderedListView(){
         UnorderedListView unorderedListView = new UnorderedListView(this);
         unorderedListView.setOnRemoveClickListener(this::removeView);
-        unorderedListView.setOnAddUnorderedListViewListener((view, textAfter) -> {
-            int indexOfCurrentChild = binding.layoutArticle.indexOfChild(view);
-            if (indexOfCurrentChild != -1){
-                addUnorderedListView(textAfter, indexOfCurrentChild+1);
-            }
-        });
         unorderedListView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) currentFocusChild = v;
             binding.layoutAttachment.ivLink.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
