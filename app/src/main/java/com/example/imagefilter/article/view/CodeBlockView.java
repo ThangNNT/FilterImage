@@ -1,6 +1,8 @@
 package com.example.imagefilter.article.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,8 +55,8 @@ public class CodeBlockView extends FrameLayout implements Attachable, Focusable 
 
     @Override
     public String getHtml() {
-        String text = mBinding.edtContent.getText().toString();
-        return "<p class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.CODE_BLOCK_VIEW + "\"><code>" + text + "</code></p>";
+        Editable text = mBinding.edtContent.getText();
+        return "<div class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.CODE_BLOCK_VIEW + "\"><code>" + Html.toHtml(text, Html.FROM_HTML_SEPARATOR_LINE_BREAK_PARAGRAPH) + "</code></div>";
     }
 
     @Override
