@@ -16,10 +16,11 @@ import com.example.imagefilter.article.base.Attachable;
 import com.example.imagefilter.article.base.Focusable;
 import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
+import com.example.imagefilter.article.base.Switchable;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewUnorderedListBinding;
 
-public class UnorderedListView extends FrameLayout implements Attachable, Focusable, Linkable {
+public class UnorderedListView extends FrameLayout implements Attachable, Focusable, Linkable, Switchable {
     private ViewUnorderedListBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
     private OnFocusChangeListener mOnFocusChangeListener;
@@ -94,4 +95,18 @@ public class UnorderedListView extends FrameLayout implements Attachable, Focusa
         mBinding.edtContent.setLink(text, url);
     }
 
+    @Override
+    public Spanned getSpanned() {
+        return mBinding.edtContent.getEditableText();
+    }
+
+    @Override
+    public int getSelectionStart() {
+        return mBinding.edtContent.getSelectionStart();
+    }
+
+    @Override
+    public void setSelectionStart(int position) {
+        mBinding.edtContent.setSelection(position);
+    }
 }

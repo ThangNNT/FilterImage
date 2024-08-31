@@ -16,10 +16,11 @@ import com.example.imagefilter.article.ClassDefine;
 import com.example.imagefilter.article.base.Attachable;
 import com.example.imagefilter.article.base.Focusable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
+import com.example.imagefilter.article.base.Switchable;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewCodeBlockBinding;
 
-public class CodeBlockView extends FrameLayout implements Attachable, Focusable {
+public class CodeBlockView extends FrameLayout implements Attachable, Focusable, Switchable {
 
     private ViewCodeBlockBinding mBinding;
     private OnRemoveClickListener mOnRemoveClickListener;
@@ -77,5 +78,20 @@ public class CodeBlockView extends FrameLayout implements Attachable, Focusable 
 
     public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
         this.mOnFocusChangeListener = mOnFocusChangeListener;
+    }
+
+    @Override
+    public Spanned getSpanned() {
+        return mBinding.edtContent.getText();
+    }
+
+    @Override
+    public int getSelectionStart() {
+        return mBinding.edtContent.getSelectionStart();
+    }
+
+    @Override
+    public void setSelectionStart(int position) {
+        mBinding.edtContent.setSelection(position);
     }
 }

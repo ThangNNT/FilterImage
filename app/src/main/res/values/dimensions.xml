@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="switch_menu_offset">26dp</dimen>
+
     <!--text size -->
     <dimen name="code_block_text_size">14sp</dimen>
     <dimen name="quote_text_size">18sp</dimen>
     <dimen name="text_attachment_size">20sp</dimen>
     <dimen name="header_text_size">24sp</dimen>
+    <dimen name="subtitle_text_size">22sp</dimen>
     <dimen name="ul_item_text_size">18sp</dimen>
     <dimen name="image_title_text_size">18sp</dimen>
 
@@ -34,4 +37,5 @@
 
     <dimen name="ul_item_margin_top">24dp</dimen>
     <dimen name="ul_item_margin_horizontal">24dp</dimen>
+
 </resources>

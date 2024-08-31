@@ -37,6 +37,7 @@ public class PreviewActivity extends AppCompatActivity {
         if (html == null) return;
         int codeBlockTextSize = getTextSize(R.dimen.code_block_text_size);
         int headerTextSize = getTextSize(R.dimen.header_text_size);
+        int subTitleTextSize = getTextSize(R.dimen.subtitle_text_size);
         int quoteTextSize = getTextSize(R.dimen.quote_text_size);
         int textSize = getTextSize(R.dimen.text_attachment_size);
         int listItemTextSize = getTextSize(R.dimen.ul_item_text_size);
@@ -138,6 +139,11 @@ public class PreviewActivity extends AppCompatActivity {
                 "        .text-view {" +
                 "            margin: " + textViewMarginTop + "px " + textViewMarginHorizontal + "px 0 " + textViewMarginHorizontal + "px;" +
                 "            font-size: " + textSize + "px;" +
+                "        }" +
+                "        .subtitle-view {" +
+                "            font-weight: bold;" +
+                "            margin: " + textViewMarginTop + "px " + textViewMarginHorizontal + "px 0 " + textViewMarginHorizontal + "px;" +
+                "            font-size: " + subTitleTextSize + "px;" +
                 "        }" +
                 "        .list-item-view{" +
                 "           font-size: "+listItemTextSize+"px;" +

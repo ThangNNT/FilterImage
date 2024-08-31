@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="@dimen/text_view_margin_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.example.imagefilter.article.SpannableEditText
+        android:id="@+id/edt_content"
+        android:hint="Input your subtitle"
+        android:layout_marginTop="@dimen/text_view_margin_top"
+        android:textSize="@dimen/subtitle_text_size"
+        android:textStyle="bold"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_delete"
+        app:srcCompat="@drawable/ic_close_24"
+        app:tint="@color/black"
+        android:padding="4dp"
+        android:visibility="gone"
+        android:layout_gravity="end"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:ignore="ContentDescription" />
+</FrameLayout>

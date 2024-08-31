@@ -15,10 +15,11 @@ import com.example.imagefilter.article.base.Attachable;
 import com.example.imagefilter.article.base.Focusable;
 import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
+import com.example.imagefilter.article.base.Switchable;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewTextBinding;
 
-public class TextAttachmentView extends FrameLayout implements Attachable, Focusable, Linkable {
+public class TextAttachmentView extends FrameLayout implements Attachable, Focusable, Linkable, Switchable {
     private ViewTextBinding mBinding;
     private View.OnFocusChangeListener mOnFocusChangeListener;
     private OnRemoveClickListener mOnRemoveClickListener;
@@ -78,5 +79,20 @@ public class TextAttachmentView extends FrameLayout implements Attachable, Focus
 
     public void setOnRemoveClickListener(OnRemoveClickListener mOnRemoveClickListener) {
         this.mOnRemoveClickListener = mOnRemoveClickListener;
+    }
+
+    @Override
+    public Spanned getSpanned() {
+        return mBinding.edtContent.getEditableText();
+    }
+
+    @Override
+    public int getSelectionStart() {
+        return mBinding.edtContent.getSelectionStart();
+    }
+
+    @Override
+    public void setSelectionStart(int position) {
+        mBinding.edtContent.setSelection(position);
     }
 }

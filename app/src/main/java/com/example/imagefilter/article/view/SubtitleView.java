@@ -17,47 +17,45 @@ import com.example.imagefilter.article.base.Linkable;
 import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.base.Switchable;
 import com.example.imagefilter.article.utils.Utils;
-import com.example.imagefilter.databinding.ViewQuoteBinding;
+import com.example.imagefilter.databinding.ViewSubtitleBinding;
+import com.example.imagefilter.databinding.ViewTextBinding;
 
-public class QuoteView extends FrameLayout implements Attachable, Focusable, Linkable, Switchable {
-    private ViewQuoteBinding mBinding;
-    private OnRemoveClickListener mOnRemoveClickListener;
+public class SubtitleView extends FrameLayout implements Attachable, Focusable, Linkable, Switchable {
+    private ViewSubtitleBinding mBinding;
     private OnFocusChangeListener mOnFocusChangeListener;
-    public QuoteView(@NonNull Context context) {
+    private OnRemoveClickListener mOnRemoveClickListener;
+
+    public SubtitleView(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public QuoteView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SubtitleView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public QuoteView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SubtitleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init(){
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        mBinding = ViewQuoteBinding.inflate(layoutInflater, this, true);
-        mBinding.ivDelete.setVisibility(GONE);
+        mBinding = ViewSubtitleBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        mBinding.edtContent.setOnFocusChangeListener((v, hasFocus)->{
+            mBinding.ivDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+            if (mOnFocusChangeListener == null) return;
+            mOnFocusChangeListener.onFocusChange(this, hasFocus);
+        });
         mBinding.ivDelete.setOnClickListener(v -> {
             if (mOnRemoveClickListener == null) return;
             mOnRemoveClickListener.onRemove(this);
-        });
-        mBinding.edtContent.setOnFocusChangeListener((v, hasFocus) -> {
-            mBinding.ivDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-            if (mOnFocusChangeListener != null){
-                mOnFocusChangeListener.onFocusChange(this, hasFocus);
-            }
         });
     }
 
     @Override
     public String getHtml() {
-        String quote = mBinding.edtContent.getHtml();
-        return "<blockquote class=\""+ ClassDefine.ATTACHABLE_CLASS +" "+ClassDefine.QUOTE_VIEW +"\">" + quote + " </blockquote>";
+        return "<div class=\"" + ClassDefine.ATTACHABLE_CLASS + " " + ClassDefine.SUBTITLE_ATTACHMENT + "\">" + mBinding.edtContent.getHtml() + "</div>";
     }
 
     public void setSpanned(Spanned spanned){
@@ -65,22 +63,23 @@ public class QuoteView extends FrameLayout implements Attachable, Focusable, Lin
     }
 
     @Override
-    public void focus() {
+    public void focus(){
         mBinding.edtContent.requestFocus();
         Utils.showKeyboard(getContext(), mBinding.edtContent);
     }
 
-    public void setOnRemoveClickListener(OnRemoveClickListener listener) {
-        this.mOnRemoveClickListener = listener;
+    @Override
+    public void setLink(String text, String url){
+         mBinding.edtContent.setLink(text, url);
     }
+
 
     public void setOnFocusChangeListener(OnFocusChangeListener mOnFocusChangeListener) {
         this.mOnFocusChangeListener = mOnFocusChangeListener;
     }
 
-    @Override
-    public void setLink(String text, String url) {
-        mBinding.edtContent.setLink(text, url);
+    public void setOnRemoveClickListener(OnRemoveClickListener mOnRemoveClickListener) {
+        this.mOnRemoveClickListener = mOnRemoveClickListener;
     }
 
     @Override
