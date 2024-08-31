@@ -18,7 +18,6 @@ import com.example.imagefilter.article.base.OnRemoveClickListener;
 import com.example.imagefilter.article.base.Switchable;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.databinding.ViewSubtitleBinding;
-import com.example.imagefilter.databinding.ViewTextBinding;
 
 public class SubtitleView extends FrameLayout implements Attachable, Focusable, Linkable, Switchable {
     private ViewSubtitleBinding mBinding;
@@ -59,7 +58,7 @@ public class SubtitleView extends FrameLayout implements Attachable, Focusable, 
     }
 
     public void setSpanned(Spanned spanned){
-        mBinding.edtContent.setText(spanned);
+        mBinding.edtContent.setSpannedText(spanned);
     }
 
     @Override

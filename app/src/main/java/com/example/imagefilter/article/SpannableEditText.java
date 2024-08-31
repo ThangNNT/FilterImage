@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.example.imagefilter.R;
+import com.example.imagefilter.article.base.MyUnderlineSpan;
 import com.example.imagefilter.article.utils.Utils;
 import com.example.imagefilter.article.base.Attachable;
 import com.example.imagefilter.article.base.Focusable;
@@ -121,15 +122,15 @@ public class SpannableEditText extends AppCompatEditText implements Attachable, 
                         int spanStart = text.getSpanStart(span);
                         int spanEnd = text.getSpanEnd(span);
                         if (spanStart < selectionStart) {
-                            text.setSpan(new UnderlineSpan(), spanStart, selectionStart, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            text.setSpan(new MyUnderlineSpan(), spanStart, selectionStart, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                         }
                         if (spanEnd > selectionEnd) {
-                            text.setSpan(new UnderlineSpan(), selectionEnd, spanEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            text.setSpan(new MyUnderlineSpan(), selectionEnd, spanEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                         }
                         text.removeSpan(span);
                     }
                     if (spans.length == 0) {
-                        text.setSpan(new UnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        text.setSpan(new MyUnderlineSpan(), selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
                     return true;
                 }
@@ -145,6 +146,15 @@ public class SpannableEditText extends AppCompatEditText implements Attachable, 
 
     @Override
     public String getHtml() {
+        Editable text = getText();
+        if (text == null) return "";
+        UnderlineSpan[] spannedList = text.getSpans(0, text.length(), UnderlineSpan.class);
+        for (UnderlineSpan span: spannedList){
+            if (!(span instanceof MyUnderlineSpan)){
+                // remove underline span which system auto add
+                text.removeSpan(span);
+            }
+        }
         return Html.toHtml(getEditableText(), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
     }
 
@@ -163,5 +173,18 @@ public class SpannableEditText extends AppCompatEditText implements Attachable, 
         setSelection(selectedStart + text.length());
         editable.setSpan(new URLSpan(url), selectedStart, selectedStart + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+    }
+
+    public void setSpannedText(Spanned spanned){
+        setText(spanned);
+        Editable text = getText();
+        if (text == null) return;
+        UnderlineSpan[] spannedList = text.getSpans(0, text.length(), UnderlineSpan.class);
+        for (UnderlineSpan span: spannedList){
+            int start = text.getSpanStart(span);
+            int end = text.getSpanEnd(span);
+            text.setSpan(new MyUnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            text.removeSpan(span);
+        }
     }
 }
